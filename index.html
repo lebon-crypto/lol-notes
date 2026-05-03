@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0044)file:///C:/Users/User/Downloads/index_1.html -->
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>海克斯大亂鬥筆記</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link href="./海克斯大亂鬥筆記_files/css2" rel="stylesheet">
 <style>
   :root {
     --gold: #C89B3C; --gold-dark: #785A28;
@@ -141,9 +141,8 @@
 </div>
 
 <div class="nav">
-  <div class="nav-btn active" onclick="switchPage('list')">📋 我的筆記</div>
-  <div class="nav-btn" onclick="switchPage('add')">➕ 新增筆記</div>
-  <div class="nav-btn" onclick="switchPage('settings')">⚙️ 設定</div>
+  <div class="nav-btn active" onclick="switchPage(&#39;list&#39;)">📋 我的筆記</div>
+  <div class="nav-btn" onclick="switchPage(&#39;add&#39;)">➕ 新增筆記</div>
 </div>
 
 <!-- LIST -->
@@ -161,7 +160,7 @@
   <div class="card-champ">
     <div class="section-label" style="color:var(--blue);letter-spacing:3px;">⚔ 選擇英雄</div>
     <div id="champSelected" style="display:none" class="selected-champ">
-      <img id="selectedImg" src="" alt="">
+      <img id="selectedImg" src="file:///C:/Users/User/Downloads/index_1.html" alt="">
       <div style="flex:1">
         <div class="selected-champ-name" id="selectedName"></div>
         <div class="selected-champ-en" id="selectedEn"></div>
@@ -174,8 +173,11 @@
     </div>
   </div>
 
-  <div class="card-aug">
-    <div class="section-label" style="color:var(--gold);letter-spacing:3px;">✦ 增幅組合（可多選）</div>
+  <div class="card-aug" id="aug-section-top">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div onclick="clearChamp()" style="cursor:pointer;color:var(--blue);font-size:18px;line-height:1;">←</div>
+      <div class="section-label" style="color:var(--gold);letter-spacing:3px;margin-bottom:0;">✦ 增幅組合（可多選）</div>
+    </div>
 
     <input class="aug-search" type="text" placeholder="🔍 搜尋增幅名稱..." oninput="filterAllAugs(this.value)" id="aug-search-all">
 
@@ -212,10 +214,10 @@
   <div class="card">
     <div class="section-label">資料來源</div>
     <div class="source-row" id="sourceRow">
-      <div class="source-btn active" onclick="setSource('自己摸索',this)">自己摸索</div>
-      <div class="source-btn" onclick="setSource('YouTube',this)">YouTube</div>
-      <div class="source-btn" onclick="setSource('小超夢',this)">小超夢</div>
-      <div class="source-btn" onclick="setSource('lplfantown',this)">lplfantown</div>
+      <div class="source-btn active" onclick="setSource(&#39;自己摸索&#39;,this)">自己摸索</div>
+      <div class="source-btn" onclick="setSource(&#39;YouTube&#39;,this)">YouTube</div>
+      <div class="source-btn" onclick="setSource(&#39;小超夢&#39;,this)">小超夢</div>
+      <div class="source-btn" onclick="setSource(&#39;lplfantown&#39;,this)">lplfantown</div>
     </div>
   </div>
 
@@ -224,31 +226,12 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- SETTINGS -->
-<div class="page" id="page-settings">
-  <div class="card">
-    <div class="section-label" style="color:var(--blue);letter-spacing:3px;">⚙ JSONBin 設定</div>
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;line-height:1.6;">
-      將筆記儲存到雲端，任何裝置都能讀取。<br>
-      請到 <a href="https://jsonbin.io" target="_blank" style="color:var(--blue)">jsonbin.io</a> 免費註冊取得以下資訊。
-    </p>
-
-    <div class="section-label" style="margin-bottom:6px;">BIN ID</div>
-    <input class="champ-search" type="text" id="cfg-bin-id" placeholder="例如：67f3a8c2ad19ca34f8a1b2c3" style="margin-bottom:14px;">
-
-    <div class="section-label" style="margin-bottom:6px;">X-Master-Key</div>
-    <input class="champ-search" type="password" id="cfg-api-key" placeholder="$2a$10$..." style="margin-bottom:6px;">
-    <p style="font-size:11px;color:var(--text-dim);margin-bottom:16px;">Key 只存在你的瀏覽器裡，不會上傳到任何地方。</p>
-
-    <button class="submit-btn" onclick="saveSettings()">💾 儲存設定</button>
-  </div>
-
   <div class="card" id="cfg-status-card" style="display:none">
     <div class="section-label" style="margin-bottom:8px;">連線狀態</div>
     <div id="cfg-status" style="font-size:13px;"></div>
     <button class="submit-btn" onclick="testConnection()" style="margin-top:12px;background:linear-gradient(135deg,#0A3D62,var(--blue));color:#fff;">🔌 測試連線</button>
   </div>
-</div>
+
 
 <script>
 const CHAMPIONS = [
@@ -472,6 +455,10 @@ function selectChamp(tw, en) {
   document.getElementById('selectedImg').onerror = function(){ imgFallback(this, tw); };
   document.getElementById('selectedName').textContent = tw;
   document.getElementById('selectedEn').textContent = en;
+  // 自動滑到增幅區
+  setTimeout(() => {
+    document.getElementById('aug-section-top').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 150);
 }
 function clearChamp() {
   selectedChamp = null;
@@ -664,13 +651,14 @@ function renderList() {
       ...(n.augSilver ? n.augSilver.split('、').map(a=>`<span class="augment-tag aug-silver">⚪ ${a}</span>`) : []),
     ].join('');
     html += `<div class="note-card">
-      <div class="note-card-top">
-        <div style="flex:1">
-          <div class="note-card-date">${n.date} · <span class="note-card-source">${n.source}</span></div>
-        </div>
+      <div class="note-card-header">
+        <div class="note-card-meta">${n.date}</div>
+        <span class="note-card-source-tag">${n.source}</span>
       </div>
-      <div class="augment-tags">${augs}</div>
-      ${n.text?`<div class="note-card-text">${n.text}</div>`:''}
+      <div class="note-card-body">
+        ${augs ? `<div class="augment-tags">${augs}</div>` : ''}
+        ${n.text?`<div class="note-card-text">${n.text}</div>`:''}
+      </div>
       <div class="note-card-actions">
         <button class="action-btn" onclick="editNote(${n.id})">✏️ 編輯</button>
         <button class="action-btn delete" onclick="deleteNote(${n.id})">🗑️ 刪除</button>
@@ -684,7 +672,7 @@ function switchPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-  const idx = {list:0, add:1, settings:2}[page] || 0;
+  const idx = {list:0, add:1}[page] || 0;
   document.querySelectorAll('.nav-btn')[idx].classList.add('active');
   if (page==='list') renderList();
 }
@@ -706,5 +694,6 @@ initAugGrids();
 apiGet();
 </script>
 
-</body>
-</html>
+
+
+</body></html>
