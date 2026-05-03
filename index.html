@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/User/Downloads/lol-aram-notes_9.html -->
-<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>海克斯大亂鬥筆記</title>
-<link href="./海克斯大亂鬥筆記_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --gold: #C89B3C; --gold-dark: #785A28;
@@ -57,13 +57,13 @@
   .tier-silver { background:rgba(168,168,192,0.15); color:var(--silver); border:1px solid var(--silver); }
 
   /* Augment grid multi-select */
-  .aug-section { margin-bottom:14px; }
+  .aug-section { margin-bottom:10px; }
   .aug-section:last-child { margin-bottom:0; }
   .aug-tier-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
   .aug-search { width:100%; background:var(--bg4); border:1px solid var(--border); border-radius:8px; padding:10px 14px; color:var(--text); font-size:14px; font-family:inherit; outline:none; margin-bottom:12px; }
   .aug-search:focus { border-color:rgba(200,155,60,0.5); }
   .aug-search:focus { border-color:rgba(200,155,60,0.4); }
-  .aug-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; }
+  .aug-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; }
   .aug-cell { background:var(--bg4); border:1px solid var(--border); border-radius:7px; padding:8px 6px; font-size:13px; font-weight:500; cursor:pointer; text-align:center; line-height:1.3; transition:all 0.15s; color:var(--text-dim); }
   .aug-cell:active { transform:scale(0.96); }
   .aug-cell.selected-prismatic { background:rgba(232,64,87,0.25); border-color:var(--prismatic); color:var(--prismatic); font-weight:700; font-size:13px; }
@@ -76,9 +76,7 @@
   .aug-tag-silver { background:rgba(168,168,192,0.15); color:var(--silver); border:1px solid var(--silver); }
 
   /* Rating */
-  .star-row { display:flex; gap:6px; }
-  .star { font-size:28px; cursor:pointer; opacity:0.3; transition:all 0.15s; }
-  .star.active { opacity:1; }
+
 
   /* Notes */
   .notes-area { width:100%; background:var(--bg4); border:1px solid var(--border); border-radius:8px; padding:12px; color:var(--text); font-size:13px; font-family:inherit; outline:none; min-height:90px; resize:none; line-height:1.6; }
@@ -101,15 +99,12 @@
   .filter-chip.active { border-color:var(--gold); color:var(--gold); background:rgba(200,155,60,0.1); }
 
   .note-card { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px; position:relative; overflow:hidden; }
-  .note-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
-  .note-card.r5::before { background:var(--gold); }
-  .note-card.r4::before { background:var(--silver); }
-  .note-card.r3::before { background:#666; }
+  .note-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--blue); }
   .note-card-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
   .note-card-img { width:44px; height:44px; border-radius:7px; border:1px solid var(--border); object-fit:cover; background:var(--bg4); flex-shrink:0; }
   .note-card-champ { font-size:16px; font-weight:700; }
   .note-card-date { font-size:10px; color:var(--text-dim); }
-  .note-card-stars { font-size:12px; margin-left:auto; }
+
   .note-card-source { font-size:10px; color:var(--blue); background:rgba(11,196,227,0.1); padding:2px 6px; border-radius:4px; }
   .augment-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
   .augment-tag { font-size:11px; padding:3px 9px; border-radius:20px; }
@@ -127,6 +122,9 @@
   .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--gold); color:#0A0E1A; padding:12px 24px; border-radius:30px; font-weight:700; font-size:13px; transition:transform 0.3s; z-index:999; white-space:nowrap; }
   .toast.show { transform:translateX(-50%) translateY(0); }
 
+  .champ-group-header { display:flex; align-items:center; gap:8px; padding:10px 4px 6px; font-size:15px; font-weight:700; color:var(--gold); border-bottom:1px solid var(--border); margin-bottom:8px; margin-top:16px; }
+  .champ-group-header:first-child { margin-top:0; }
+  .champ-group-header img { width:30px; height:30px; border-radius:5px; }
   ::-webkit-scrollbar { width:4px; height:4px; }
   ::-webkit-scrollbar-track { background:var(--bg); }
   ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
@@ -139,13 +137,13 @@
     <div class="header-title">海克斯<span>大亂鬥</span>筆記</div>
     <div class="header-sub">HEXTECH ARAM MAYHEM</div>
   </div>
-  <div id="noteCount" style="font-size:12px;color:var(--text-dim);">2 筆</div>
+  <div id="noteCount" style="font-size:12px;color:var(--text-dim);"></div>
 </div>
 
 <div class="nav">
-  <div class="nav-btn active" onclick="switchPage(&#39;list&#39;)">📋 我的筆記</div>
-  <div class="nav-btn" onclick="switchPage(&#39;add&#39;)">➕ 新增筆記</div>
-  <div class="nav-btn" onclick="switchPage(&#39;settings&#39;)">⚙️ 設定</div>
+  <div class="nav-btn active" onclick="switchPage('list')">📋 我的筆記</div>
+  <div class="nav-btn" onclick="switchPage('add')">➕ 新增筆記</div>
+  <div class="nav-btn" onclick="switchPage('settings')">⚙️ 設定</div>
 </div>
 
 <!-- LIST -->
@@ -154,53 +152,8 @@
     <span class="search-icon">🔍</span>
     <input class="list-search" type="text" placeholder="搜尋英雄或增幅..." oninput="renderList()" id="listSearch">
   </div>
-  <div class="filter-row">
-    <div class="filter-chip active" onclick="setFilter(&#39;all&#39;,this)">全部</div>
-    <div class="filter-chip" onclick="setFilter(&#39;5&#39;,this)">⭐⭐⭐⭐⭐</div>
-    <div class="filter-chip" onclick="setFilter(&#39;4&#39;,this)">⭐⭐⭐⭐</div>
-    <div class="filter-chip" onclick="setFilter(&#39;3&#39;,this)">⭐⭐⭐</div>
-  </div>
-  <div id="notesList">
-    <div class="note-card r0">
-      <div class="note-card-top">
-        <img class="note-card-img" src="./海克斯大亂鬥筆記_files/Katarina.png" alt="卡特蓮娜" loading="lazy" onerror="imgFallback(this,&#39;卡特蓮娜&#39;)">
-        <div style="flex:1">
-          <div class="note-card-champ">卡特蓮娜</div>
-          <div class="note-card-date">2026/5/3 · <span class="note-card-source">自己摸索</span></div>
-        </div>
-        <div class="note-card-stars"></div>
-      </div>
-      <div class="augment-tags">
-        
-        <span class="augment-tag aug-gold">🟡 穩紮穩打、幻影武器</span>
-        <span class="augment-tag aug-silver">⚪ 一轉就贏、無敵大絕</span>
-      </div>
-      
-      <div class="note-card-actions">
-        <button class="action-btn" onclick="editNote(1777739936857)">✏️ 編輯</button>
-        <button class="action-btn delete" onclick="deleteNote(1777739936857)">🗑️ 刪除</button>
-      </div>
-    </div>
-    <div class="note-card r0">
-      <div class="note-card-top">
-        <img class="note-card-img" src="./海克斯大亂鬥筆記_files/Jayce.png" alt="杰西" loading="lazy" onerror="imgFallback(this,&#39;杰西&#39;)">
-        <div style="flex:1">
-          <div class="note-card-champ">杰西</div>
-          <div class="note-card-date">2026/5/3 · <span class="note-card-source">自己摸索</span></div>
-        </div>
-        <div class="note-card-stars"></div>
-      </div>
-      <div class="augment-tags">
-        
-        <span class="augment-tag aug-gold">🟡 穩紮穩打</span>
-        
-      </div>
-      
-      <div class="note-card-actions">
-        <button class="action-btn" onclick="editNote(1777739626620)">✏️ 編輯</button>
-        <button class="action-btn delete" onclick="deleteNote(1777739626620)">🗑️ 刪除</button>
-      </div>
-    </div></div>
+
+  <div id="notesList"></div>
 </div>
 
 <!-- ADD -->
@@ -208,7 +161,7 @@
   <div class="card-champ">
     <div class="section-label" style="color:var(--blue);letter-spacing:3px;">⚔ 選擇英雄</div>
     <div id="champSelected" style="display:none" class="selected-champ">
-      <img id="selectedImg" src="file:///C:/Users/User/Downloads/lol-aram-notes_9.html" alt="">
+      <img id="selectedImg" src="" alt="">
       <div style="flex:1">
         <div class="selected-champ-name" id="selectedName"></div>
         <div class="selected-champ-en" id="selectedEn"></div>
@@ -217,511 +170,7 @@
     </div>
     <div id="champPicker">
       <input class="champ-search" type="text" placeholder="搜尋英雄..." oninput="filterChamps()" id="champSearchInput">
-      <div class="champ-grid" id="champGrid"><div class="champ-item" onclick="selectChamp(&#39;厄薩斯&#39;,&#39;Aatrox&#39;)" title="厄薩斯">
-      <img src="./海克斯大亂鬥筆記_files/Aatrox.png" alt="厄薩斯" loading="lazy" onerror="imgFallback(this,&#39;厄薩斯&#39;)">
-      <div class="cn">厄薩斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;阿璃&#39;,&#39;Ahri&#39;)" title="阿璃">
-      <img src="./海克斯大亂鬥筆記_files/Ahri.png" alt="阿璃" loading="lazy" onerror="imgFallback(this,&#39;阿璃&#39;)">
-      <div class="cn">阿璃</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;阿卡莉&#39;,&#39;Akali&#39;)" title="阿卡莉">
-      <img src="./海克斯大亂鬥筆記_files/Akali.png" alt="阿卡莉" loading="lazy" onerror="imgFallback(this,&#39;阿卡莉&#39;)">
-      <div class="cn">阿卡莉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;埃可尚&#39;,&#39;Akshan&#39;)" title="埃可尚">
-      <img src="./海克斯大亂鬥筆記_files/Akshan.png" alt="埃可尚" loading="lazy" onerror="imgFallback(this,&#39;埃可尚&#39;)">
-      <div class="cn">埃可尚</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;亞歷斯塔&#39;,&#39;Alistar&#39;)" title="亞歷斯塔">
-      <img src="./海克斯大亂鬥筆記_files/Alistar.png" alt="亞歷斯塔" loading="lazy" onerror="imgFallback(this,&#39;亞歷斯塔&#39;)">
-      <div class="cn">亞歷</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;阿姆姆&#39;,&#39;Amumu&#39;)" title="阿姆姆">
-      <img src="./海克斯大亂鬥筆記_files/Amumu.png" alt="阿姆姆" loading="lazy" onerror="imgFallback(this,&#39;阿姆姆&#39;)">
-      <div class="cn">阿姆姆</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;安比薩&#39;,&#39;Ambessa&#39;)" title="安比薩">
-      <img src="./海克斯大亂鬥筆記_files/Ambessa.png" alt="安比薩" loading="lazy" onerror="imgFallback(this,&#39;安比薩&#39;)">
-      <div class="cn">安比薩</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;艾妮維亞&#39;,&#39;Anivia&#39;)" title="艾妮維亞">
-      <img src="./海克斯大亂鬥筆記_files/Anivia.png" alt="艾妮維亞" loading="lazy" onerror="imgFallback(this,&#39;艾妮維亞&#39;)">
-      <div class="cn">艾妮</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;安妮&#39;,&#39;Annie&#39;)" title="安妮">
-      <img src="./海克斯大亂鬥筆記_files/Annie.png" alt="安妮" loading="lazy" onerror="imgFallback(this,&#39;安妮&#39;)">
-      <div class="cn">安妮</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;亞菲利歐&#39;,&#39;Aphelios&#39;)" title="亞菲利歐">
-      <img src="./海克斯大亂鬥筆記_files/Aphelios.png" alt="亞菲利歐" loading="lazy" onerror="imgFallback(this,&#39;亞菲利歐&#39;)">
-      <div class="cn">亞菲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;艾希&#39;,&#39;Ashe&#39;)" title="艾希">
-      <img src="./海克斯大亂鬥筆記_files/Ashe.png" alt="艾希" loading="lazy" onerror="imgFallback(this,&#39;艾希&#39;)">
-      <div class="cn">艾希</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;翱銳龍獸&#39;,&#39;AurelionSol&#39;)" title="翱銳龍獸">
-      <img src="./海克斯大亂鬥筆記_files/AurelionSol.png" alt="翱銳龍獸" loading="lazy" onerror="imgFallback(this,&#39;翱銳龍獸&#39;)">
-      <div class="cn">翱銳</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;歐羅拉&#39;,&#39;Aurora&#39;)" title="歐羅拉">
-      <img src="./海克斯大亂鬥筆記_files/Aurora.png" alt="歐羅拉" loading="lazy" onerror="imgFallback(this,&#39;歐羅拉&#39;)">
-      <div class="cn">歐羅拉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;阿祈爾&#39;,&#39;Azir&#39;)" title="阿祈爾">
-      <img src="./海克斯大亂鬥筆記_files/Azir.png" alt="阿祈爾" loading="lazy" onerror="imgFallback(this,&#39;阿祈爾&#39;)">
-      <div class="cn">阿祈爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;巴德&#39;,&#39;Bard&#39;)" title="巴德">
-      <img src="./海克斯大亂鬥筆記_files/Bard.png" alt="巴德" loading="lazy" onerror="imgFallback(this,&#39;巴德&#39;)">
-      <div class="cn">巴德</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;貝爾薇斯&#39;,&#39;Belveth&#39;)" title="貝爾薇斯">
-      <img src="./海克斯大亂鬥筆記_files/Belveth.png" alt="貝爾薇斯" loading="lazy" onerror="imgFallback(this,&#39;貝爾薇斯&#39;)">
-      <div class="cn">貝爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;布里茨&#39;,&#39;Blitzcrank&#39;)" title="布里茨">
-      <img src="./海克斯大亂鬥筆記_files/Blitzcrank.png" alt="布里茨" loading="lazy" onerror="imgFallback(this,&#39;布里茨&#39;)">
-      <div class="cn">布里茨</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;布蘭德&#39;,&#39;Brand&#39;)" title="布蘭德">
-      <img src="./海克斯大亂鬥筆記_files/Brand.png" alt="布蘭德" loading="lazy" onerror="imgFallback(this,&#39;布蘭德&#39;)">
-      <div class="cn">布蘭德</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;布郎姆&#39;,&#39;Braum&#39;)" title="布郎姆">
-      <img src="./海克斯大亂鬥筆記_files/Braum.png" alt="布郎姆" loading="lazy" onerror="imgFallback(this,&#39;布郎姆&#39;)">
-      <div class="cn">布郎姆</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;布蕾爾&#39;,&#39;Briar&#39;)" title="布蕾爾">
-      <img src="./海克斯大亂鬥筆記_files/Briar.png" alt="布蕾爾" loading="lazy" onerror="imgFallback(this,&#39;布蕾爾&#39;)">
-      <div class="cn">布蕾爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡蜜兒&#39;,&#39;Camille&#39;)" title="卡蜜兒">
-      <img src="./海克斯大亂鬥筆記_files/Camille.png" alt="卡蜜兒" loading="lazy" onerror="imgFallback(this,&#39;卡蜜兒&#39;)">
-      <div class="cn">卡蜜兒</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡莎碧雅&#39;,&#39;Cassiopeia&#39;)" title="卡莎碧雅">
-      <img src="./海克斯大亂鬥筆記_files/Cassiopeia.png" alt="卡莎碧雅" loading="lazy" onerror="imgFallback(this,&#39;卡莎碧雅&#39;)">
-      <div class="cn">卡莎</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;科加斯&#39;,&#39;Chogath&#39;)" title="科加斯">
-      <img src="./海克斯大亂鬥筆記_files/Chogath.png" alt="科加斯" loading="lazy" onerror="imgFallback(this,&#39;科加斯&#39;)">
-      <div class="cn">科加斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;庫奇&#39;,&#39;Corki&#39;)" title="庫奇">
-      <img src="./海克斯大亂鬥筆記_files/Corki.png" alt="庫奇" loading="lazy" onerror="imgFallback(this,&#39;庫奇&#39;)">
-      <div class="cn">庫奇</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;達瑞斯&#39;,&#39;Darius&#39;)" title="達瑞斯">
-      <img src="./海克斯大亂鬥筆記_files/Darius.png" alt="達瑞斯" loading="lazy" onerror="imgFallback(this,&#39;達瑞斯&#39;)">
-      <div class="cn">達瑞斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;黛安娜&#39;,&#39;Diana&#39;)" title="黛安娜">
-      <img src="./海克斯大亂鬥筆記_files/Diana.png" alt="黛安娜" loading="lazy" onerror="imgFallback(this,&#39;黛安娜&#39;)">
-      <div class="cn">黛安娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;蒙多醫生&#39;,&#39;DrMundo&#39;)" title="蒙多醫生">
-      <img src="./海克斯大亂鬥筆記_files/DrMundo.png" alt="蒙多醫生" loading="lazy" onerror="imgFallback(this,&#39;蒙多醫生&#39;)">
-      <div class="cn">蒙多</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;達瑞文&#39;,&#39;Draven&#39;)" title="達瑞文">
-      <img src="./海克斯大亂鬥筆記_files/Draven.png" alt="達瑞文" loading="lazy" onerror="imgFallback(this,&#39;達瑞文&#39;)">
-      <div class="cn">達瑞文</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;艾克&#39;,&#39;Ekko&#39;)" title="艾克">
-      <img src="./海克斯大亂鬥筆記_files/Ekko.png" alt="艾克" loading="lazy" onerror="imgFallback(this,&#39;艾克&#39;)">
-      <div class="cn">艾克</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;伊莉絲&#39;,&#39;Elise&#39;)" title="伊莉絲">
-      <img src="./海克斯大亂鬥筆記_files/Elise.png" alt="伊莉絲" loading="lazy" onerror="imgFallback(this,&#39;伊莉絲&#39;)">
-      <div class="cn">伊莉絲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;伊芙琳&#39;,&#39;Evelynn&#39;)" title="伊芙琳">
-      <img src="./海克斯大亂鬥筆記_files/Evelynn.png" alt="伊芙琳" loading="lazy" onerror="imgFallback(this,&#39;伊芙琳&#39;)">
-      <div class="cn">伊芙琳</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;伊澤瑞爾&#39;,&#39;Ezreal&#39;)" title="伊澤瑞爾">
-      <img src="./海克斯大亂鬥筆記_files/Ezreal.png" alt="伊澤瑞爾" loading="lazy" onerror="imgFallback(this,&#39;伊澤瑞爾&#39;)">
-      <div class="cn">伊澤</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;費德提克&#39;,&#39;Fiddlesticks&#39;)" title="費德提克">
-      <img src="./海克斯大亂鬥筆記_files/Fiddlesticks.png" alt="費德提克" loading="lazy" onerror="imgFallback(this,&#39;費德提克&#39;)">
-      <div class="cn">費德</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;菲歐拉&#39;,&#39;Fiora&#39;)" title="菲歐拉">
-      <img src="./海克斯大亂鬥筆記_files/Fiora.png" alt="菲歐拉" loading="lazy" onerror="imgFallback(this,&#39;菲歐拉&#39;)">
-      <div class="cn">菲歐拉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;飛斯&#39;,&#39;Fizz&#39;)" title="飛斯">
-      <img src="./海克斯大亂鬥筆記_files/Fizz.png" alt="飛斯" loading="lazy" onerror="imgFallback(this,&#39;飛斯&#39;)">
-      <div class="cn">飛斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;加里歐&#39;,&#39;Galio&#39;)" title="加里歐">
-      <img src="./海克斯大亂鬥筆記_files/Galio.png" alt="加里歐" loading="lazy" onerror="imgFallback(this,&#39;加里歐&#39;)">
-      <div class="cn">加里歐</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;剛普朗克&#39;,&#39;Gangplank&#39;)" title="剛普朗克">
-      <img src="./海克斯大亂鬥筆記_files/Gangplank.png" alt="剛普朗克" loading="lazy" onerror="imgFallback(this,&#39;剛普朗克&#39;)">
-      <div class="cn">剛普</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;蓋倫&#39;,&#39;Garen&#39;)" title="蓋倫">
-      <img src="./海克斯大亂鬥筆記_files/Garen.png" alt="蓋倫" loading="lazy" onerror="imgFallback(this,&#39;蓋倫&#39;)">
-      <div class="cn">蓋倫</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;吶兒&#39;,&#39;Gnar&#39;)" title="吶兒">
-      <img src="./海克斯大亂鬥筆記_files/Gnar.png" alt="吶兒" loading="lazy" onerror="imgFallback(this,&#39;吶兒&#39;)">
-      <div class="cn">吶兒</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;古拉格斯&#39;,&#39;Gragas&#39;)" title="古拉格斯">
-      <img src="./海克斯大亂鬥筆記_files/Gragas.png" alt="古拉格斯" loading="lazy" onerror="imgFallback(this,&#39;古拉格斯&#39;)">
-      <div class="cn">古拉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;葛雷夫&#39;,&#39;Graves&#39;)" title="葛雷夫">
-      <img src="./海克斯大亂鬥筆記_files/Graves.png" alt="葛雷夫" loading="lazy" onerror="imgFallback(this,&#39;葛雷夫&#39;)">
-      <div class="cn">葛雷夫</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;關&#39;,&#39;Gwen&#39;)" title="關">
-      <img src="./海克斯大亂鬥筆記_files/Gwen.png" alt="關" loading="lazy" onerror="imgFallback(this,&#39;關&#39;)">
-      <div class="cn">關</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;赫克林&#39;,&#39;Hecarim&#39;)" title="赫克林">
-      <img src="./海克斯大亂鬥筆記_files/Hecarim.png" alt="赫克林" loading="lazy" onerror="imgFallback(this,&#39;赫克林&#39;)">
-      <div class="cn">赫克林</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;漢默丁格&#39;,&#39;Heimerdinger&#39;)" title="漢默丁格">
-      <img src="./海克斯大亂鬥筆記_files/Heimerdinger.png" alt="漢默丁格" loading="lazy" onerror="imgFallback(this,&#39;漢默丁格&#39;)">
-      <div class="cn">漢默</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;赫威&#39;,&#39;Hwei&#39;)" title="赫威">
-      <img src="./海克斯大亂鬥筆記_files/Hwei.png" alt="赫威" loading="lazy" onerror="imgFallback(this,&#39;赫威&#39;)">
-      <div class="cn">赫威</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;伊羅旖&#39;,&#39;Illaoi&#39;)" title="伊羅旖">
-      <img src="./海克斯大亂鬥筆記_files/Illaoi.png" alt="伊羅旖" loading="lazy" onerror="imgFallback(this,&#39;伊羅旖&#39;)">
-      <div class="cn">伊羅旖</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;伊瑞莉雅&#39;,&#39;Irelia&#39;)" title="伊瑞莉雅">
-      <img src="./海克斯大亂鬥筆記_files/Irelia.png" alt="伊瑞莉雅" loading="lazy" onerror="imgFallback(this,&#39;伊瑞莉雅&#39;)">
-      <div class="cn">伊瑞</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;埃爾文&#39;,&#39;Ivern&#39;)" title="埃爾文">
-      <img src="./海克斯大亂鬥筆記_files/Ivern.png" alt="埃爾文" loading="lazy" onerror="imgFallback(this,&#39;埃爾文&#39;)">
-      <div class="cn">埃爾文</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;珍娜&#39;,&#39;Janna&#39;)" title="珍娜">
-      <img src="./海克斯大亂鬥筆記_files/Janna.png" alt="珍娜" loading="lazy" onerror="imgFallback(this,&#39;珍娜&#39;)">
-      <div class="cn">珍娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;嘉文四世&#39;,&#39;JarvanIV&#39;)" title="嘉文四世">
-      <img src="./海克斯大亂鬥筆記_files/JarvanIV.png" alt="嘉文四世" loading="lazy" onerror="imgFallback(this,&#39;嘉文四世&#39;)">
-      <div class="cn">嘉文</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;賈克斯&#39;,&#39;Jax&#39;)" title="賈克斯">
-      <img src="./海克斯大亂鬥筆記_files/Jax.png" alt="賈克斯" loading="lazy" onerror="imgFallback(this,&#39;賈克斯&#39;)">
-      <div class="cn">賈克斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;杰西&#39;,&#39;Jayce&#39;)" title="杰西">
-      <img src="./海克斯大亂鬥筆記_files/Jayce.png" alt="杰西" loading="lazy" onerror="imgFallback(this,&#39;杰西&#39;)">
-      <div class="cn">杰西</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;燼&#39;,&#39;Jhin&#39;)" title="燼">
-      <img src="./海克斯大亂鬥筆記_files/Jhin.png" alt="燼" loading="lazy" onerror="imgFallback(this,&#39;燼&#39;)">
-      <div class="cn">燼</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;吉茵珂絲&#39;,&#39;Jinx&#39;)" title="吉茵珂絲">
-      <img src="./海克斯大亂鬥筆記_files/Jinx.png" alt="吉茵珂絲" loading="lazy" onerror="imgFallback(this,&#39;吉茵珂絲&#39;)">
-      <div class="cn">吉茵</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;克黎思妲&#39;,&#39;Kalista&#39;)" title="克黎思妲">
-      <img src="./海克斯大亂鬥筆記_files/Kalista.png" alt="克黎思妲" loading="lazy" onerror="imgFallback(this,&#39;克黎思妲&#39;)">
-      <div class="cn">克黎</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;凱莎&#39;,&#39;Kaisa&#39;)" title="凱莎">
-      <img src="./海克斯大亂鬥筆記_files/Kaisa.png" alt="凱莎" loading="lazy" onerror="imgFallback(this,&#39;凱莎&#39;)">
-      <div class="cn">凱莎</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡瑪&#39;,&#39;Karma&#39;)" title="卡瑪">
-      <img src="./海克斯大亂鬥筆記_files/Karma.png" alt="卡瑪" loading="lazy" onerror="imgFallback(this,&#39;卡瑪&#39;)">
-      <div class="cn">卡瑪</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡爾瑟斯&#39;,&#39;Karthus&#39;)" title="卡爾瑟斯">
-      <img src="./海克斯大亂鬥筆記_files/Karthus.png" alt="卡爾瑟斯" loading="lazy" onerror="imgFallback(this,&#39;卡爾瑟斯&#39;)">
-      <div class="cn">卡爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡薩丁&#39;,&#39;Kassadin&#39;)" title="卡薩丁">
-      <img src="./海克斯大亂鬥筆記_files/Kassadin.png" alt="卡薩丁" loading="lazy" onerror="imgFallback(this,&#39;卡薩丁&#39;)">
-      <div class="cn">卡薩丁</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡特蓮娜&#39;,&#39;Katarina&#39;)" title="卡特蓮娜">
-      <img src="./海克斯大亂鬥筆記_files/Katarina.png" alt="卡特蓮娜" loading="lazy" onerror="imgFallback(this,&#39;卡特蓮娜&#39;)">
-      <div class="cn">卡特</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;凱爾&#39;,&#39;Kayle&#39;)" title="凱爾">
-      <img src="./海克斯大亂鬥筆記_files/Kayle.png" alt="凱爾" loading="lazy" onerror="imgFallback(this,&#39;凱爾&#39;)">
-      <div class="cn">凱爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;慨影&#39;,&#39;Kayn&#39;)" title="慨影">
-      <img src="./海克斯大亂鬥筆記_files/Kayn.png" alt="慨影" loading="lazy" onerror="imgFallback(this,&#39;慨影&#39;)">
-      <div class="cn">慨影</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;凱能&#39;,&#39;Kennen&#39;)" title="凱能">
-      <img src="./海克斯大亂鬥筆記_files/Kennen.png" alt="凱能" loading="lazy" onerror="imgFallback(this,&#39;凱能&#39;)">
-      <div class="cn">凱能</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡力斯&#39;,&#39;Khazix&#39;)" title="卡力斯">
-      <img src="./海克斯大亂鬥筆記_files/Khazix.png" alt="卡力斯" loading="lazy" onerror="imgFallback(this,&#39;卡力斯&#39;)">
-      <div class="cn">卡力斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;鏡爪&#39;,&#39;Kindred&#39;)" title="鏡爪">
-      <img src="./海克斯大亂鬥筆記_files/Kindred.png" alt="鏡爪" loading="lazy" onerror="imgFallback(this,&#39;鏡爪&#39;)">
-      <div class="cn">鏡爪</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;克雷德&#39;,&#39;Kled&#39;)" title="克雷德">
-      <img src="./海克斯大亂鬥筆記_files/Kled.png" alt="克雷德" loading="lazy" onerror="imgFallback(this,&#39;克雷德&#39;)">
-      <div class="cn">克雷德</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;寇格魔&#39;,&#39;KogMaw&#39;)" title="寇格魔">
-      <img src="./海克斯大亂鬥筆記_files/KogMaw.png" alt="寇格魔" loading="lazy" onerror="imgFallback(this,&#39;寇格魔&#39;)">
-      <div class="cn">寇格魔</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;卡桑帝&#39;,&#39;KSante&#39;)" title="卡桑帝">
-      <img src="./海克斯大亂鬥筆記_files/KSante.png" alt="卡桑帝" loading="lazy" onerror="imgFallback(this,&#39;卡桑帝&#39;)">
-      <div class="cn">卡桑帝</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;李星&#39;,&#39;LeeSin&#39;)" title="李星">
-      <img src="./海克斯大亂鬥筆記_files/LeeSin.png" alt="李星" loading="lazy" onerror="imgFallback(this,&#39;李星&#39;)">
-      <div class="cn">李星</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;勒布朗&#39;,&#39;Leblanc&#39;)" title="勒布朗">
-      <img src="./海克斯大亂鬥筆記_files/Leblanc.png" alt="勒布朗" loading="lazy" onerror="imgFallback(this,&#39;勒布朗&#39;)">
-      <div class="cn">勒布朗</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;雷歐娜&#39;,&#39;Leona&#39;)" title="雷歐娜">
-      <img src="./海克斯大亂鬥筆記_files/Leona.png" alt="雷歐娜" loading="lazy" onerror="imgFallback(this,&#39;雷歐娜&#39;)">
-      <div class="cn">雷歐娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;莉莉亞&#39;,&#39;Lillia&#39;)" title="莉莉亞">
-      <img src="./海克斯大亂鬥筆記_files/Lillia.png" alt="莉莉亞" loading="lazy" onerror="imgFallback(this,&#39;莉莉亞&#39;)">
-      <div class="cn">莉莉亞</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;麗珊卓&#39;,&#39;Lissandra&#39;)" title="麗珊卓">
-      <img src="./海克斯大亂鬥筆記_files/Lissandra.png" alt="麗珊卓" loading="lazy" onerror="imgFallback(this,&#39;麗珊卓&#39;)">
-      <div class="cn">麗珊卓</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;路西恩&#39;,&#39;Lucian&#39;)" title="路西恩">
-      <img src="./海克斯大亂鬥筆記_files/Lucian.png" alt="路西恩" loading="lazy" onerror="imgFallback(this,&#39;路西恩&#39;)">
-      <div class="cn">路西恩</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;露璐&#39;,&#39;Lulu&#39;)" title="露璐">
-      <img src="./海克斯大亂鬥筆記_files/Lulu.png" alt="露璐" loading="lazy" onerror="imgFallback(this,&#39;露璐&#39;)">
-      <div class="cn">露璐</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;拉克絲&#39;,&#39;Lux&#39;)" title="拉克絲">
-      <img src="./海克斯大亂鬥筆記_files/Lux.png" alt="拉克絲" loading="lazy" onerror="imgFallback(this,&#39;拉克絲&#39;)">
-      <div class="cn">拉克絲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;馬爾札哈&#39;,&#39;Malzahar&#39;)" title="馬爾札哈">
-      <img src="./海克斯大亂鬥筆記_files/Malzahar.png" alt="馬爾札哈" loading="lazy" onerror="imgFallback(this,&#39;馬爾札哈&#39;)">
-      <div class="cn">馬爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;墨菲特&#39;,&#39;Malphite&#39;)" title="墨菲特">
-      <img src="./海克斯大亂鬥筆記_files/Malphite.png" alt="墨菲特" loading="lazy" onerror="imgFallback(this,&#39;墨菲特&#39;)">
-      <div class="cn">墨菲特</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;茂凱&#39;,&#39;Maokai&#39;)" title="茂凱">
-      <img src="./海克斯大亂鬥筆記_files/Maokai.png" alt="茂凱" loading="lazy" onerror="imgFallback(this,&#39;茂凱&#39;)">
-      <div class="cn">茂凱</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;易大師&#39;,&#39;MasterYi&#39;)" title="易大師">
-      <img src="./海克斯大亂鬥筆記_files/MasterYi.png" alt="易大師" loading="lazy" onerror="imgFallback(this,&#39;易大師&#39;)">
-      <div class="cn">易大師</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;梅爾&#39;,&#39;Mel&#39;)" title="梅爾">
-      <img src="./海克斯大亂鬥筆記_files/Mel.png" alt="梅爾" loading="lazy" onerror="imgFallback(this,&#39;梅爾&#39;)">
-      <div class="cn">梅爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;米里歐&#39;,&#39;Milio&#39;)" title="米里歐">
-      <img src="./海克斯大亂鬥筆記_files/Milio.png" alt="米里歐" loading="lazy" onerror="imgFallback(this,&#39;米里歐&#39;)">
-      <div class="cn">米里歐</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;好運姐&#39;,&#39;MissFortune&#39;)" title="好運姐">
-      <img src="./海克斯大亂鬥筆記_files/MissFortune.png" alt="好運姐" loading="lazy" onerror="imgFallback(this,&#39;好運姐&#39;)">
-      <div class="cn">好運姐</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;魔鬥凱薩&#39;,&#39;Mordekaiser&#39;)" title="魔鬥凱薩">
-      <img src="./海克斯大亂鬥筆記_files/Mordekaiser.png" alt="魔鬥凱薩" loading="lazy" onerror="imgFallback(this,&#39;魔鬥凱薩&#39;)">
-      <div class="cn">魔鬥</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;魔甘娜&#39;,&#39;Morgana&#39;)" title="魔甘娜">
-      <img src="./海克斯大亂鬥筆記_files/Morgana.png" alt="魔甘娜" loading="lazy" onerror="imgFallback(this,&#39;魔甘娜&#39;)">
-      <div class="cn">魔甘娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;娜菲芮&#39;,&#39;Naafiri&#39;)" title="娜菲芮">
-      <img src="./海克斯大亂鬥筆記_files/Naafiri.png" alt="娜菲芮" loading="lazy" onerror="imgFallback(this,&#39;娜菲芮&#39;)">
-      <div class="cn">娜菲芮</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;娜米&#39;,&#39;Nami&#39;)" title="娜米">
-      <img src="./海克斯大亂鬥筆記_files/Nami.png" alt="娜米" loading="lazy" onerror="imgFallback(this,&#39;娜米&#39;)">
-      <div class="cn">娜米</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;納瑟斯&#39;,&#39;Nasus&#39;)" title="納瑟斯">
-      <img src="./海克斯大亂鬥筆記_files/Nasus.png" alt="納瑟斯" loading="lazy" onerror="imgFallback(this,&#39;納瑟斯&#39;)">
-      <div class="cn">納瑟斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;納帝魯斯&#39;,&#39;Nautilus&#39;)" title="納帝魯斯">
-      <img src="./海克斯大亂鬥筆記_files/Nautilus.png" alt="納帝魯斯" loading="lazy" onerror="imgFallback(this,&#39;納帝魯斯&#39;)">
-      <div class="cn">納帝</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;妮可&#39;,&#39;Neeko&#39;)" title="妮可">
-      <img src="./海克斯大亂鬥筆記_files/Neeko.png" alt="妮可" loading="lazy" onerror="imgFallback(this,&#39;妮可&#39;)">
-      <div class="cn">妮可</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;奈德麗&#39;,&#39;Nidalee&#39;)" title="奈德麗">
-      <img src="./海克斯大亂鬥筆記_files/Nidalee.png" alt="奈德麗" loading="lazy" onerror="imgFallback(this,&#39;奈德麗&#39;)">
-      <div class="cn">奈德麗</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;淣菈&#39;,&#39;Nilah&#39;)" title="淣菈">
-      <img src="./海克斯大亂鬥筆記_files/Nilah.png" alt="淣菈" loading="lazy" onerror="imgFallback(this,&#39;淣菈&#39;)">
-      <div class="cn">淣菈</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;夜曲&#39;,&#39;Nocturne&#39;)" title="夜曲">
-      <img src="./海克斯大亂鬥筆記_files/Nocturne.png" alt="夜曲" loading="lazy" onerror="imgFallback(this,&#39;夜曲&#39;)">
-      <div class="cn">夜曲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;努努和威朗普&#39;,&#39;Nunu&#39;)" title="努努和威朗普">
-      <img src="./海克斯大亂鬥筆記_files/Nunu.png" alt="努努和威朗普" loading="lazy" onerror="imgFallback(this,&#39;努努和威朗普&#39;)">
-      <div class="cn">努努</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;歐拉夫&#39;,&#39;Olaf&#39;)" title="歐拉夫">
-      <img src="./海克斯大亂鬥筆記_files/Olaf.png" alt="歐拉夫" loading="lazy" onerror="imgFallback(this,&#39;歐拉夫&#39;)">
-      <div class="cn">歐拉夫</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;鄂爾&#39;,&#39;Ornn&#39;)" title="鄂爾">
-      <img src="./海克斯大亂鬥筆記_files/Ornn.png" alt="鄂爾" loading="lazy" onerror="imgFallback(this,&#39;鄂爾&#39;)">
-      <div class="cn">鄂爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;奧莉安娜&#39;,&#39;Orianna&#39;)" title="奧莉安娜">
-      <img src="./海克斯大亂鬥筆記_files/Orianna.png" alt="奧莉安娜" loading="lazy" onerror="imgFallback(this,&#39;奧莉安娜&#39;)">
-      <div class="cn">奧莉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;潘森&#39;,&#39;Pantheon&#39;)" title="潘森">
-      <img src="./海克斯大亂鬥筆記_files/Pantheon.png" alt="潘森" loading="lazy" onerror="imgFallback(this,&#39;潘森&#39;)">
-      <div class="cn">潘森</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;派克&#39;,&#39;Pyke&#39;)" title="派克">
-      <img src="./海克斯大亂鬥筆記_files/Pyke.png" alt="派克" loading="lazy" onerror="imgFallback(this,&#39;派克&#39;)">
-      <div class="cn">派克</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;姬亞娜&#39;,&#39;Qiyana&#39;)" title="姬亞娜">
-      <img src="./海克斯大亂鬥筆記_files/Qiyana.png" alt="姬亞娜" loading="lazy" onerror="imgFallback(this,&#39;姬亞娜&#39;)">
-      <div class="cn">姬亞娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;葵恩&#39;,&#39;Quinn&#39;)" title="葵恩">
-      <img src="./海克斯大亂鬥筆記_files/Quinn.png" alt="葵恩" loading="lazy" onerror="imgFallback(this,&#39;葵恩&#39;)">
-      <div class="cn">葵恩</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;銳空&#39;,&#39;Rakan&#39;)" title="銳空">
-      <img src="./海克斯大亂鬥筆記_files/Rakan.png" alt="銳空" loading="lazy" onerror="imgFallback(this,&#39;銳空&#39;)">
-      <div class="cn">銳空</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;拉姆斯&#39;,&#39;Rammus&#39;)" title="拉姆斯">
-      <img src="./海克斯大亂鬥筆記_files/Rammus.png" alt="拉姆斯" loading="lazy" onerror="imgFallback(this,&#39;拉姆斯&#39;)">
-      <div class="cn">拉姆斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;雷珂煞&#39;,&#39;RekSai&#39;)" title="雷珂煞">
-      <img src="./海克斯大亂鬥筆記_files/RekSai.png" alt="雷珂煞" loading="lazy" onerror="imgFallback(this,&#39;雷珂煞&#39;)">
-      <div class="cn">雷珂煞</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;銳兒&#39;,&#39;Rell&#39;)" title="銳兒">
-      <img src="./海克斯大亂鬥筆記_files/Rell.png" alt="銳兒" loading="lazy" onerror="imgFallback(this,&#39;銳兒&#39;)">
-      <div class="cn">銳兒</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;睿娜妲&#39;,&#39;Renata&#39;)" title="睿娜妲">
-      <img src="./海克斯大亂鬥筆記_files/Renata.png" alt="睿娜妲" loading="lazy" onerror="imgFallback(this,&#39;睿娜妲&#39;)">
-      <div class="cn">睿娜妲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;雷尼克頓&#39;,&#39;Renekton&#39;)" title="雷尼克頓">
-      <img src="./海克斯大亂鬥筆記_files/Renekton.png" alt="雷尼克頓" loading="lazy" onerror="imgFallback(this,&#39;雷尼克頓&#39;)">
-      <div class="cn">雷尼</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;雷葛爾&#39;,&#39;Rengar&#39;)" title="雷葛爾">
-      <img src="./海克斯大亂鬥筆記_files/Rengar.png" alt="雷葛爾" loading="lazy" onerror="imgFallback(this,&#39;雷葛爾&#39;)">
-      <div class="cn">雷葛爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;雷玟&#39;,&#39;Riven&#39;)" title="雷玟">
-      <img src="./海克斯大亂鬥筆記_files/Riven.png" alt="雷玟" loading="lazy" onerror="imgFallback(this,&#39;雷玟&#39;)">
-      <div class="cn">雷玟</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;藍寶&#39;,&#39;Rumble&#39;)" title="藍寶">
-      <img src="./海克斯大亂鬥筆記_files/Rumble.png" alt="藍寶" loading="lazy" onerror="imgFallback(this,&#39;藍寶&#39;)">
-      <div class="cn">藍寶</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;雷茲&#39;,&#39;Ryze&#39;)" title="雷茲">
-      <img src="./海克斯大亂鬥筆記_files/Ryze.png" alt="雷茲" loading="lazy" onerror="imgFallback(this,&#39;雷茲&#39;)">
-      <div class="cn">雷茲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;煞蜜拉&#39;,&#39;Samira&#39;)" title="煞蜜拉">
-      <img src="./海克斯大亂鬥筆記_files/Samira.png" alt="煞蜜拉" loading="lazy" onerror="imgFallback(this,&#39;煞蜜拉&#39;)">
-      <div class="cn">煞蜜拉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;姍娜&#39;,&#39;Senna&#39;)" title="姍娜">
-      <img src="./海克斯大亂鬥筆記_files/Senna.png" alt="姍娜" loading="lazy" onerror="imgFallback(this,&#39;姍娜&#39;)">
-      <div class="cn">姍娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;瑟菈紛&#39;,&#39;Seraphine&#39;)" title="瑟菈紛">
-      <img src="./海克斯大亂鬥筆記_files/Seraphine.png" alt="瑟菈紛" loading="lazy" onerror="imgFallback(this,&#39;瑟菈紛&#39;)">
-      <div class="cn">瑟菈紛</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;賽特&#39;,&#39;Sett&#39;)" title="賽特">
-      <img src="./海克斯大亂鬥筆記_files/Sett.png" alt="賽特" loading="lazy" onerror="imgFallback(this,&#39;賽特&#39;)">
-      <div class="cn">賽特</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;史瓦妮&#39;,&#39;Sejuani&#39;)" title="史瓦妮">
-      <img src="./海克斯大亂鬥筆記_files/Sejuani.png" alt="史瓦妮" loading="lazy" onerror="imgFallback(this,&#39;史瓦妮&#39;)">
-      <div class="cn">史瓦妮</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;慎&#39;,&#39;Shen&#39;)" title="慎">
-      <img src="./海克斯大亂鬥筆記_files/Shen.png" alt="慎" loading="lazy" onerror="imgFallback(this,&#39;慎&#39;)">
-      <div class="cn">慎</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;希瓦娜&#39;,&#39;Shyvana&#39;)" title="希瓦娜">
-      <img src="./海克斯大亂鬥筆記_files/Shyvana.png" alt="希瓦娜" loading="lazy" onerror="imgFallback(this,&#39;希瓦娜&#39;)">
-      <div class="cn">希瓦娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;薩科&#39;,&#39;Shaco&#39;)" title="薩科">
-      <img src="./海克斯大亂鬥筆記_files/Shaco.png" alt="薩科" loading="lazy" onerror="imgFallback(this,&#39;薩科&#39;)">
-      <div class="cn">薩科</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;辛吉德&#39;,&#39;Singed&#39;)" title="辛吉德">
-      <img src="./海克斯大亂鬥筆記_files/Singed.png" alt="辛吉德" loading="lazy" onerror="imgFallback(this,&#39;辛吉德&#39;)">
-      <div class="cn">辛吉德</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;賽恩&#39;,&#39;Sion&#39;)" title="賽恩">
-      <img src="./海克斯大亂鬥筆記_files/Sion.png" alt="賽恩" loading="lazy" onerror="imgFallback(this,&#39;賽恩&#39;)">
-      <div class="cn">賽恩</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;希維爾&#39;,&#39;Sivir&#39;)" title="希維爾">
-      <img src="./海克斯大亂鬥筆記_files/Sivir.png" alt="希維爾" loading="lazy" onerror="imgFallback(this,&#39;希維爾&#39;)">
-      <div class="cn">希維爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;史加納&#39;,&#39;Skarner&#39;)" title="史加納">
-      <img src="./海克斯大亂鬥筆記_files/Skarner.png" alt="史加納" loading="lazy" onerror="imgFallback(this,&#39;史加納&#39;)">
-      <div class="cn">史加納</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;史矛德&#39;,&#39;Smolder&#39;)" title="史矛德">
-      <img src="./海克斯大亂鬥筆記_files/Smolder.png" alt="史矛德" loading="lazy" onerror="imgFallback(this,&#39;史矛德&#39;)">
-      <div class="cn">史矛德</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;索娜&#39;,&#39;Sona&#39;)" title="索娜">
-      <img src="./海克斯大亂鬥筆記_files/Sona.png" alt="索娜" loading="lazy" onerror="imgFallback(this,&#39;索娜&#39;)">
-      <div class="cn">索娜</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;索拉卡&#39;,&#39;Soraka&#39;)" title="索拉卡">
-      <img src="./海克斯大亂鬥筆記_files/Soraka.png" alt="索拉卡" loading="lazy" onerror="imgFallback(this,&#39;索拉卡&#39;)">
-      <div class="cn">索拉卡</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;星朵拉&#39;,&#39;Syndra&#39;)" title="星朵拉">
-      <img src="./海克斯大亂鬥筆記_files/Syndra.png" alt="星朵拉" loading="lazy" onerror="imgFallback(this,&#39;星朵拉&#39;)">
-      <div class="cn">星朵拉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;賽勒斯&#39;,&#39;Sylas&#39;)" title="賽勒斯">
-      <img src="./海克斯大亂鬥筆記_files/Sylas.png" alt="賽勒斯" loading="lazy" onerror="imgFallback(this,&#39;賽勒斯&#39;)">
-      <div class="cn">賽勒斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;塔莉雅&#39;,&#39;Taliyah&#39;)" title="塔莉雅">
-      <img src="./海克斯大亂鬥筆記_files/Taliyah.png" alt="塔莉雅" loading="lazy" onerror="imgFallback(this,&#39;塔莉雅&#39;)">
-      <div class="cn">塔莉雅</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;塔隆&#39;,&#39;Talon&#39;)" title="塔隆">
-      <img src="./海克斯大亂鬥筆記_files/Talon.png" alt="塔隆" loading="lazy" onerror="imgFallback(this,&#39;塔隆&#39;)">
-      <div class="cn">塔隆</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;貪啃奇&#39;,&#39;TahmKench&#39;)" title="貪啃奇">
-      <img src="./海克斯大亂鬥筆記_files/TahmKench.png" alt="貪啃奇" loading="lazy" onerror="imgFallback(this,&#39;貪啃奇&#39;)">
-      <div class="cn">貪啃奇</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;塔里克&#39;,&#39;Taric&#39;)" title="塔里克">
-      <img src="./海克斯大亂鬥筆記_files/Taric.png" alt="塔里克" loading="lazy" onerror="imgFallback(this,&#39;塔里克&#39;)">
-      <div class="cn">塔里克</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;提摩&#39;,&#39;Teemo&#39;)" title="提摩">
-      <img src="./海克斯大亂鬥筆記_files/Teemo.png" alt="提摩" loading="lazy" onerror="imgFallback(this,&#39;提摩&#39;)">
-      <div class="cn">提摩</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;瑟雷西&#39;,&#39;Thresh&#39;)" title="瑟雷西">
-      <img src="./海克斯大亂鬥筆記_files/Thresh.png" alt="瑟雷西" loading="lazy" onerror="imgFallback(this,&#39;瑟雷西&#39;)">
-      <div class="cn">瑟雷西</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;崔絲塔娜&#39;,&#39;Tristana&#39;)" title="崔絲塔娜">
-      <img src="./海克斯大亂鬥筆記_files/Tristana.png" alt="崔絲塔娜" loading="lazy" onerror="imgFallback(this,&#39;崔絲塔娜&#39;)">
-      <div class="cn">崔絲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;特朗德&#39;,&#39;Trundle&#39;)" title="特朗德">
-      <img src="./海克斯大亂鬥筆記_files/Trundle.png" alt="特朗德" loading="lazy" onerror="imgFallback(this,&#39;特朗德&#39;)">
-      <div class="cn">特朗德</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;泰達米爾&#39;,&#39;Tryndamere&#39;)" title="泰達米爾">
-      <img src="./海克斯大亂鬥筆記_files/Tryndamere.png" alt="泰達米爾" loading="lazy" onerror="imgFallback(this,&#39;泰達米爾&#39;)">
-      <div class="cn">泰達</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;圖奇&#39;,&#39;Twitch&#39;)" title="圖奇">
-      <img src="./海克斯大亂鬥筆記_files/Twitch.png" alt="圖奇" loading="lazy" onerror="imgFallback(this,&#39;圖奇&#39;)">
-      <div class="cn">圖奇</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;逆命&#39;,&#39;TwistedFate&#39;)" title="逆命">
-      <img src="./海克斯大亂鬥筆記_files/TwistedFate.png" alt="逆命" loading="lazy" onerror="imgFallback(this,&#39;逆命&#39;)">
-      <div class="cn">逆命</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;烏迪爾&#39;,&#39;Udyr&#39;)" title="烏迪爾">
-      <img src="./海克斯大亂鬥筆記_files/Udyr.png" alt="烏迪爾" loading="lazy" onerror="imgFallback(this,&#39;烏迪爾&#39;)">
-      <div class="cn">烏迪爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;烏爾加特&#39;,&#39;Urgot&#39;)" title="烏爾加特">
-      <img src="./海克斯大亂鬥筆記_files/Urgot.png" alt="烏爾加特" loading="lazy" onerror="imgFallback(this,&#39;烏爾加特&#39;)">
-      <div class="cn">烏爾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;法洛士&#39;,&#39;Varus&#39;)" title="法洛士">
-      <img src="./海克斯大亂鬥筆記_files/Varus.png" alt="法洛士" loading="lazy" onerror="imgFallback(this,&#39;法洛士&#39;)">
-      <div class="cn">法洛士</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;汎&#39;,&#39;Vayne&#39;)" title="汎">
-      <img src="./海克斯大亂鬥筆記_files/Vayne.png" alt="汎" loading="lazy" onerror="imgFallback(this,&#39;汎&#39;)">
-      <div class="cn">汎</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;維迦&#39;,&#39;Veigar&#39;)" title="維迦">
-      <img src="./海克斯大亂鬥筆記_files/Veigar.png" alt="維迦" loading="lazy" onerror="imgFallback(this,&#39;維迦&#39;)">
-      <div class="cn">維迦</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;威寇茲&#39;,&#39;Velkoz&#39;)" title="威寇茲">
-      <img src="./海克斯大亂鬥筆記_files/Velkoz.png" alt="威寇茲" loading="lazy" onerror="imgFallback(this,&#39;威寇茲&#39;)">
-      <div class="cn">威寇茲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;薇可絲&#39;,&#39;Vex&#39;)" title="薇可絲">
-      <img src="./海克斯大亂鬥筆記_files/Vex.png" alt="薇可絲" loading="lazy" onerror="imgFallback(this,&#39;薇可絲&#39;)">
-      <div class="cn">薇可絲</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;菲艾&#39;,&#39;Vi&#39;)" title="菲艾">
-      <img src="./海克斯大亂鬥筆記_files/Vi.png" alt="菲艾" loading="lazy" onerror="imgFallback(this,&#39;菲艾&#39;)">
-      <div class="cn">菲艾</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;維爾戈&#39;,&#39;Viego&#39;)" title="維爾戈">
-      <img src="./海克斯大亂鬥筆記_files/Viego.png" alt="維爾戈" loading="lazy" onerror="imgFallback(this,&#39;維爾戈&#39;)">
-      <div class="cn">維爾戈</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;維克特&#39;,&#39;Viktor&#39;)" title="維克特">
-      <img src="./海克斯大亂鬥筆記_files/Viktor.png" alt="維克特" loading="lazy" onerror="imgFallback(this,&#39;維克特&#39;)">
-      <div class="cn">維克特</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;弗力貝爾&#39;,&#39;Volibear&#39;)" title="弗力貝爾">
-      <img src="./海克斯大亂鬥筆記_files/Volibear.png" alt="弗力貝爾" loading="lazy" onerror="imgFallback(this,&#39;弗力貝爾&#39;)">
-      <div class="cn">弗力</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;弗拉迪米爾&#39;,&#39;Vladimir&#39;)" title="弗拉迪米爾">
-      <img src="./海克斯大亂鬥筆記_files/Vladimir.png" alt="弗拉迪米爾" loading="lazy" onerror="imgFallback(this,&#39;弗拉迪米爾&#39;)">
-      <div class="cn">弗拉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;沃維克&#39;,&#39;Warwick&#39;)" title="沃維克">
-      <img src="./海克斯大亂鬥筆記_files/Warwick.png" alt="沃維克" loading="lazy" onerror="imgFallback(this,&#39;沃維克&#39;)">
-      <div class="cn">沃維克</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;剎雅&#39;,&#39;Xayah&#39;)" title="剎雅">
-      <img src="./海克斯大亂鬥筆記_files/Xayah.png" alt="剎雅" loading="lazy" onerror="imgFallback(this,&#39;剎雅&#39;)">
-      <div class="cn">剎雅</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;齊勒斯&#39;,&#39;Xerath&#39;)" title="齊勒斯">
-      <img src="./海克斯大亂鬥筆記_files/Xerath.png" alt="齊勒斯" loading="lazy" onerror="imgFallback(this,&#39;齊勒斯&#39;)">
-      <div class="cn">齊勒斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;趙信&#39;,&#39;XinZhao&#39;)" title="趙信">
-      <img src="./海克斯大亂鬥筆記_files/XinZhao.png" alt="趙信" loading="lazy" onerror="imgFallback(this,&#39;趙信&#39;)">
-      <div class="cn">趙信</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;犽宿&#39;,&#39;Yasuo&#39;)" title="犽宿">
-      <img src="./海克斯大亂鬥筆記_files/Yasuo.png" alt="犽宿" loading="lazy" onerror="imgFallback(this,&#39;犽宿&#39;)">
-      <div class="cn">犽宿</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;犽凝&#39;,&#39;Yone&#39;)" title="犽凝">
-      <img src="./海克斯大亂鬥筆記_files/Yone.png" alt="犽凝" loading="lazy" onerror="imgFallback(this,&#39;犽凝&#39;)">
-      <div class="cn">犽凝</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;約瑞科&#39;,&#39;Yorick&#39;)" title="約瑞科">
-      <img src="./海克斯大亂鬥筆記_files/Yorick.png" alt="約瑞科" loading="lazy" onerror="imgFallback(this,&#39;約瑞科&#39;)">
-      <div class="cn">約瑞科</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;尤娜拉&#39;,&#39;Yunara&#39;)" title="尤娜拉">
-      <img src="./海克斯大亂鬥筆記_files/Yunara.png" alt="尤娜拉" loading="lazy" onerror="imgFallback(this,&#39;尤娜拉&#39;)">
-      <div class="cn">尤娜拉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;悠咪&#39;,&#39;Yuumi&#39;)" title="悠咪">
-      <img src="./海克斯大亂鬥筆記_files/Yuumi.png" alt="悠咪" loading="lazy" onerror="imgFallback(this,&#39;悠咪&#39;)">
-      <div class="cn">悠咪</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;薩亨&#39;,&#39;Zaahen&#39;)" title="薩亨">
-      <img src="./海克斯大亂鬥筆記_files/Zaahen.png" alt="薩亨" loading="lazy" onerror="imgFallback(this,&#39;薩亨&#39;)">
-      <div class="cn">薩亨</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;札克&#39;,&#39;Zac&#39;)" title="札克">
-      <img src="./海克斯大亂鬥筆記_files/Zac.png" alt="札克" loading="lazy" onerror="imgFallback(this,&#39;札克&#39;)">
-      <div class="cn">札克</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;劫&#39;,&#39;Zed&#39;)" title="劫">
-      <img src="./海克斯大亂鬥筆記_files/Zed.png" alt="劫" loading="lazy" onerror="imgFallback(this,&#39;劫&#39;)">
-      <div class="cn">劫</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;婕莉&#39;,&#39;Zeri&#39;)" title="婕莉">
-      <img src="./海克斯大亂鬥筆記_files/Zeri.png" alt="婕莉" loading="lazy" onerror="imgFallback(this,&#39;婕莉&#39;)">
-      <div class="cn">婕莉</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;希格斯&#39;,&#39;Ziggs&#39;)" title="希格斯">
-      <img src="./海克斯大亂鬥筆記_files/Ziggs.png" alt="希格斯" loading="lazy" onerror="imgFallback(this,&#39;希格斯&#39;)">
-      <div class="cn">希格斯</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;極靈&#39;,&#39;Zilean&#39;)" title="極靈">
-      <img src="./海克斯大亂鬥筆記_files/Zilean.png" alt="極靈" loading="lazy" onerror="imgFallback(this,&#39;極靈&#39;)">
-      <div class="cn">極靈</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;柔依&#39;,&#39;Zoe&#39;)" title="柔依">
-      <img src="./海克斯大亂鬥筆記_files/Zoe.png" alt="柔依" loading="lazy" onerror="imgFallback(this,&#39;柔依&#39;)">
-      <div class="cn">柔依</div>
-    </div><div class="champ-item" onclick="selectChamp(&#39;枷蘿&#39;,&#39;Zyra&#39;)" title="枷蘿">
-      <img src="./海克斯大亂鬥筆記_files/Zyra.png" alt="枷蘿" loading="lazy" onerror="imgFallback(this,&#39;枷蘿&#39;)">
-      <div class="cn">枷蘿</div>
-    </div></div>
+      <div class="champ-grid" id="champGrid"></div>
     </div>
   </div>
 
@@ -735,34 +184,23 @@
         <div class="tier-badge tier-prismatic">彩色</div>
         <div id="aug-tags-prismatic" class="aug-selected-tags"></div>
       </div>
-      <div class="aug-grid" id="aug-grid-prismatic"><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;大地覺醒&#39;)">大地覺醒</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;巨人&#39;)">巨人</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;祕術拳擊&#39;)">祕術拳擊</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;戰爭交響曲&#39;)">戰爭交響曲</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;任務：烏莉特&#39;)">任務：烏莉特</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;妖精魔法&#39;)">妖精魔法</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;巨人殺手&#39;)">巨人殺手</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;質變：大混亂&#39;)">質變：大混亂</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;小丑學院&#39;)">小丑學院</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;不祥契約&#39;)">不祥契約</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;劍舞之心&#39;)">劍舞之心</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;衝鋒&#39;)">衝鋒</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;靈光一閃&#39;)">靈光一閃</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;煉獄使者&#39;)">煉獄使者</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;輕舞飛揚&#39;)">輕舞飛揚</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;旋風鎚&#39;)">旋風鎚</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;巨無霸雪球&#39;)">巨無霸雪球</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;能力值堆堆&#39;)">能力值堆堆</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;隨我同因&#39;)">隨我同因</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;奪命飛踢&#39;)">奪命飛踢</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;潘朵拉的寶盒&#39;)">潘朵拉的寶盒</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;寶石手套&#39;)">寶石手套</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;最終型態&#39;)">最終型態</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;雙刀流&#39;)">雙刀流</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;基本功夫&#39;)">基本功夫</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;地獄三頭犬&#39;)">地獄三頭犬</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;觸發地獄火狂襲&#39;)">觸發地獄火狂襲</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;封我為王&#39;)">封我為王</div><div class="aug-cell " onclick="toggleAug(&#39;prismatic&#39;,&#39;神聖雪球&#39;)">神聖雪球</div></div>
+      <div class="aug-grid" id="aug-grid-prismatic"></div>
     </div>
 
-    <div class="aug-section" style="margin-top:12px">
+    <div class="aug-section">
       <div class="aug-tier-header">
         <div class="tier-badge tier-gold">金色</div>
         <div id="aug-tags-gold" class="aug-selected-tags"></div>
       </div>
-      <div class="aug-grid" id="aug-grid-gold"><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;處刑者&#39;)">處刑者</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;自始至終&#39;)">自始至終</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;俠盜恆毅&#39;)">俠盜恆毅</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;穿針引線&#39;)">穿針引線</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;射手法師&#39;)">射手法師</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;魔法導彈&#39;)">魔法導彈</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;殺戮時間&#39;)">殺戮時間</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;質變：稜鏡&#39;)">質變：稜鏡</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;暗夜潛行&#39;)">暗夜潛行</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;升級傲慢&#39;)">升級傲慢</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;靈魂淨化&#39;)">靈魂淨化</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;吸血迷信&#39;)">吸血迷信</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;縮小引擎&#39;)">縮小引擎</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;極度邪惡&#39;)">極度邪惡</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;頂尖發明家&#39;)">頂尖發明家</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;不死魔舞&#39;)">不死魔舞</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;幻影武器&#39;)">幻影武器</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;煽動群眾&#39;)">煽動群眾</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;見縫插針&#39;)">見縫插針</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;二次三次&#39;)">二次三次</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;任務：鋼鐵雄心&#39;)">任務：鋼鐵雄心</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;超強大腦&#39;)">超強大腦</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;穩紮穩打&#39;)">穩紮穩打</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;狂躁！&#39;)">狂躁！</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;雪球升級&#39;)">雪球升級</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;雪球輪盤&#39;)">雪球輪盤</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;坦克引擎&#39;)">坦克引擎</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;彈珠台&#39;)">彈珠台</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;斗內&#39;)">斗內</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;紅包&#39;)">紅包</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;終城快車&#39;)">終城快車</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;能力值堆起來！&#39;)">能力值堆起來！</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;阿嬤的辣油&#39;)">阿嬤的辣油</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;腳程加速&#39;)">腳程加速</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;痛恨一擊&#39;)">痛恨一擊</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;符文術士&#39;)">符文術士</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;電光石火&#39;)">電光石火</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;循環利用&#39;)">循環利用</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;縮小光線&#39;)">縮小光線</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;靈魂虹吸&#39;)">靈魂虹吸</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;土司和奶油&#39;)">土司和奶油</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;暴擊治療&#39;)">暴擊治療</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;土司和起司&#39;)">土司和起司</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;聖光顯靈&#39;)">聖光顯靈</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;作弊&#39;)">作弊</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;急遽成長&#39;)">急遽成長</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;普羅能量炮&#39;)">普羅能量炮</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;升級閃耀劍&#39;)">升級閃耀劍</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;雙重命中&#39;)">雙重命中</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;煽風點火&#39;)">煽風點火</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;老練狙擊手&#39;)">老練狙擊手</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;溢流&#39;)">溢流</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;棒棒回力鏢&#39;)">棒棒回力鏢</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;食魂者&#39;)">食魂者</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;超狙武器&#39;)">超狙武器</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;暴擊節奏&#39;)">暴擊節奏</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;升級無盡之刃&#39;)">升級無盡之刃</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;暴擊沖天炮&#39;)">暴擊沖天炮</div><div class="aug-cell " onclick="toggleAug(&#39;gold&#39;,&#39;魔法崩彈&#39;)">魔法崩彈</div></div>
+      <div class="aug-grid" id="aug-grid-gold"></div>
     </div>
 
-    <div class="aug-section" style="margin-top:12px">
+    <div class="aug-section">
       <div class="aug-tier-header">
         <div class="tier-badge tier-silver">白銀</div>
         <div id="aug-tags-silver" class="aug-selected-tags"></div>
       </div>
-      <div class="aug-grid" id="aug-grid-silver"><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;煉獄惡靈&#39;)">煉獄惡靈</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;飛影跑法&#39;)">飛影跑法</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;女巫思維&#39;)">女巫思維</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;無敵大絕&#39;)">無敵大絕</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;飲血&#39;)">飲血</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;靈活轉換&#39;)">靈活轉換</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;一轉就贏&#39;)">一轉就贏</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;質變：金級&#39;)">質變：金級</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;又快又穩&#39;)">又快又穩</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;自爆炸彈客&#39;)">自爆炸彈客</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;亮起來！&#39;)">亮起來！</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;兇殘之柄&#39;)">兇殘之柄</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;颱風&#39;)">颱風</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;自我毀滅&#39;)">自我毀滅</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;轉換惡作劇&#39;)">轉換惡作劇</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;火狐&#39;)">火狐</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;升級中姬沙漏&#39;)">升級中姬沙漏</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;升級收藏家&#39;)">升級收藏家</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;收頭好手&#39;)">收頭好手</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;增益麻吉&#39;)">增益麻吉</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;海洋之魂&#39;)">海洋之魂</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;毫髮無傷&#39;)">毫髮無傷</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;腿部訓練日&#39;)">腿部訓練日</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;巨大盾牌&#39;)">巨大盾牌</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;刃下狂風&#39;)">刃下狂風</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;能力值！&#39;)">能力值！</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;重磅爆發&#39;)">重磅爆發</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;蠻力重擊&#39;)">蠻力重擊</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;極限衝鋒&#39;)">極限衝鋒</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;急救箱&#39;)">急救箱</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;逃跑計畫&#39;)">逃跑計畫</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;手腳麻利&#39;)">手腳麻利</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;射程強化改造&#39;)">射程強化改造</div><div class="aug-cell " onclick="toggleAug(&#39;silver&#39;,&#39;活力補給&#39;)">活力補給</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">這個組合有多強？</div>
-    <div class="star-row" id="starRow">
-      <span class="star" onclick="setRating(1)">⭐</span>
-      <span class="star" onclick="setRating(2)">⭐</span>
-      <span class="star" onclick="setRating(3)">⭐</span>
-      <span class="star" onclick="setRating(4)">⭐</span>
-      <span class="star" onclick="setRating(5)">⭐</span>
+      <div class="aug-grid" id="aug-grid-silver"></div>
     </div>
   </div>
 
@@ -774,10 +212,10 @@
   <div class="card">
     <div class="section-label">資料來源</div>
     <div class="source-row" id="sourceRow">
-      <div class="source-btn active" onclick="setSource(&#39;自己摸索&#39;,this)">自己摸索</div>
-      <div class="source-btn" onclick="setSource(&#39;YouTube&#39;,this)">YouTube</div>
-      <div class="source-btn" onclick="setSource(&#39;小超夢&#39;,this)">小超夢</div>
-      <div class="source-btn" onclick="setSource(&#39;lplfantown&#39;,this)">lplfantown</div>
+      <div class="source-btn active" onclick="setSource('自己摸索',this)">自己摸索</div>
+      <div class="source-btn" onclick="setSource('YouTube',this)">YouTube</div>
+      <div class="source-btn" onclick="setSource('小超夢',this)">小超夢</div>
+      <div class="source-btn" onclick="setSource('lplfantown',this)">lplfantown</div>
     </div>
   </div>
 
@@ -792,7 +230,7 @@
     <div class="section-label" style="color:var(--blue);letter-spacing:3px;">⚙ JSONBin 設定</div>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;line-height:1.6;">
       將筆記儲存到雲端，任何裝置都能讀取。<br>
-      請到 <a href="https://jsonbin.io/" target="_blank" style="color:var(--blue)">jsonbin.io</a> 免費註冊取得以下資訊。
+      請到 <a href="https://jsonbin.io" target="_blank" style="color:var(--blue)">jsonbin.io</a> 免費註冊取得以下資訊。
     </p>
 
     <div class="section-label" style="margin-bottom:6px;">BIN ID</div>
@@ -805,7 +243,7 @@
     <button class="submit-btn" onclick="saveSettings()">💾 儲存設定</button>
   </div>
 
-  <div class="card" id="cfg-status-card" style="display: block;">
+  <div class="card" id="cfg-status-card" style="display:none">
     <div class="section-label" style="margin-bottom:8px;">連線狀態</div>
     <div id="cfg-status" style="font-size:13px;"></div>
     <button class="submit-btn" onclick="testConnection()" style="margin-top:12px;background:linear-gradient(135deg,#0A3D62,var(--blue));color:#fff;">🔌 測試連線</button>
@@ -1079,10 +517,7 @@ function initAugGrids() {
 }
 
 // === Rating & Source ===
-function setRating(n) {
-  currentRating = n;
-  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('active', i < n));
-}
+function setRating(n) { currentRating = n; }
 function setSource(src, el) {
   currentSource = src;
   document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
@@ -1180,7 +615,7 @@ function resetForm() {
     renderAugGrid(t);
     renderAugTags(t);
   });
-  document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+
   document.querySelectorAll('.source-btn').forEach((b,i) => b.classList.toggle('active', i===0));
   renderChampGrid();
 }
@@ -1200,40 +635,49 @@ function setFilter(f, el) {
 }
 function renderList() {
   const search = document.getElementById('listSearch').value.toLowerCase();
-  const filtered = notes.filter(n => {
-    const ms = !search || n.champ.includes(search) ||
+  let filtered = notes.filter(n => {
+    return !search || n.champ.includes(search) ||
       (n.augPrismatic||'').includes(search) || (n.augGold||'').includes(search) ||
       (n.augSilver||'').includes(search) || (n.text||'').includes(search);
-    const mf = currentFilter === 'all' || n.rating === parseInt(currentFilter);
-    return ms && mf;
   });
+  // 相同英雄放在一起，英雄名排序
+  filtered.sort((a,b) => a.champ.localeCompare(b.champ, 'zh-TW'));
   document.getElementById('noteCount').textContent = `${notes.length} 筆`;
   const list = document.getElementById('notesList');
   if (!filtered.length) {
     list.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div>${notes.length===0?'還沒有筆記，去新增一筆吧！':'找不到符合的筆記'}</div></div>`;
     return;
   }
-  list.innerHTML = filtered.map(n => `
-    <div class="note-card r${n.rating}">
+  let lastChamp = '';
+  let html = '';
+  filtered.forEach(n => {
+    if (n.champ !== lastChamp) {
+      lastChamp = n.champ;
+      html += `<div class="champ-group-header">
+        <img src="${champImg(n.champEn)}" onerror="imgFallback(this,'${n.champ}')">
+        <span>${n.champ}</span>
+      </div>`;
+    }
+    const augs = [
+      ...(n.augPrismatic ? n.augPrismatic.split('、').map(a=>`<span class="augment-tag aug-prismatic">🔴 ${a}</span>`) : []),
+      ...(n.augGold ? n.augGold.split('、').map(a=>`<span class="augment-tag aug-gold">🟡 ${a}</span>`) : []),
+      ...(n.augSilver ? n.augSilver.split('、').map(a=>`<span class="augment-tag aug-silver">⚪ ${a}</span>`) : []),
+    ].join('');
+    html += `<div class="note-card">
       <div class="note-card-top">
-        <img class="note-card-img" src="${champImg(n.champEn)}" alt="${n.champ}" loading="lazy" onerror="imgFallback(this,'${n.champ}')">
         <div style="flex:1">
-          <div class="note-card-champ">${n.champ}</div>
           <div class="note-card-date">${n.date} · <span class="note-card-source">${n.source}</span></div>
         </div>
-        <div class="note-card-stars">${'⭐'.repeat(n.rating||0)}</div>
       </div>
-      <div class="augment-tags">
-        ${n.augPrismatic?`<span class="augment-tag aug-prismatic">🔴 ${n.augPrismatic}</span>`:''}
-        ${n.augGold?`<span class="augment-tag aug-gold">🟡 ${n.augGold}</span>`:''}
-        ${n.augSilver?`<span class="augment-tag aug-silver">⚪ ${n.augSilver}</span>`:''}
-      </div>
+      <div class="augment-tags">${augs}</div>
       ${n.text?`<div class="note-card-text">${n.text}</div>`:''}
       <div class="note-card-actions">
         <button class="action-btn" onclick="editNote(${n.id})">✏️ 編輯</button>
         <button class="action-btn delete" onclick="deleteNote(${n.id})">🗑️ 刪除</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  });
+  list.innerHTML = html;
 }
 
 function switchPage(page) {
@@ -1262,6 +706,5 @@ initAugGrids();
 apiGet();
 </script>
 
-
-
-</body></html>
+</body>
+</html>
