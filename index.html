@@ -64,7 +64,8 @@
   .aug-search:focus { border-color:rgba(200,155,60,0.5); }
   .aug-search:focus { border-color:rgba(200,155,60,0.4); }
   .aug-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; }
-  .aug-cell { background:var(--bg4); border:1px solid var(--border); border-radius:7px; padding:8px 6px; font-size:13px; font-weight:500; cursor:pointer; text-align:center; line-height:1.3; transition:all 0.15s; color:var(--text-dim); }
+  .aug-cell { background:var(--bg4); border:1px solid var(--border); border-radius:7px; padding:8px 6px; font-size:12px; font-weight:500; cursor:pointer; text-align:center; line-height:1.3; transition:all 0.15s; color:var(--text-dim); display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .aug-cell img { width:36px; height:36px; object-fit:contain; border-radius:4px; flex-shrink:0; }
   .aug-cell:active { transform:scale(0.96); }
   .aug-cell.selected-prismatic { background:rgba(232,64,87,0.25); border-color:var(--prismatic); color:var(--prismatic); font-weight:700; font-size:13px; }
   .aug-cell.selected-gold { background:rgba(200,155,60,0.2); border-color:var(--gold); color:var(--gold); font-weight:700; }
@@ -345,6 +346,7 @@ let selectedChamp = null, currentRating = 0, currentSource = '自己摸索', edi
 let currentFilter = 'all';
 let selectedAugs = { prismatic: [], gold: [], silver: [] };
 let notes = [];
+let augmentImageMap = {};
 function getConfig() {
   return {
     binId: localStorage.getItem('jsonbin_bin_id') || '',
@@ -472,15 +474,40 @@ function clearChamp() {
 function renderAugGrid(tier, filter='') {
   const f = filter.toLowerCase();
   const list = AUGMENTS[tier].filter(a => {
-    // skip comment lines
     if (a.startsWith('//')) return false;
     return !f || a.includes(filter) || a.toLowerCase().includes(f);
   });
   const grid = document.getElementById('aug-grid-' + tier);
   grid.innerHTML = list.map(a => {
     const sel = selectedAugs[tier].includes(a);
-    return `<div class="aug-cell ${sel ? 'selected-'+tier : ''}" onclick="toggleAug('${tier}','${a}')">${a}</div>`;
+    const imgUrl = augmentImageMap[a];
+    const imgHtml = imgUrl ? `<img src="${imgUrl}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+    const aEsc = a.replace(/'/g, "\\'");
+    return `<div class="aug-cell ${sel ? 'selected-'+tier : ''}" onclick="toggleAug('${tier}','${aEsc}')">${imgHtml}<span>${a}</span></div>`;
   }).join('');
+}
+
+async function loadAugmentImages() {
+  const locales = ['zh_tw', 'zh-tw', 'zh_cn'];
+  let augData = null;
+  for (const locale of locales) {
+    try {
+      const res = await fetch(`https://raw.communitydragon.org/latest/cdragon/arena/${locale}.json`);
+      if (res.ok) {
+        const data = await res.json();
+        augData = Array.isArray(data) ? data : (data.augments || []);
+        if (augData.length > 0) break;
+      }
+    } catch(e) {}
+  }
+  if (!augData || !augData.length) return;
+  augData.forEach(aug => {
+    if (!aug.name || (!aug.iconSmall && !aug.iconLarge)) return;
+    const iconPath = aug.iconSmall || aug.iconLarge;
+    augmentImageMap[aug.name] = 'https://raw.communitydragon.org/latest' + iconPath.toLowerCase();
+  });
+  const searchVal = document.getElementById('aug-search-all') ? document.getElementById('aug-search-all').value : '';
+  filterAllAugs(searchVal);
 }
 function filterAugGrid(tier, val) { renderAugGrid(tier, val); }
 function filterAllAugs(val) {
@@ -661,11 +688,16 @@ function renderList() {
       </div>
       <div class="note-card-actions">
         <button class="action-btn" onclick="editNote(${n.id})">✏️ 編輯</button>
+        <button class="action-btn" onclick="searchYoutube('${n.champ}')">▶ 影片</button>
         <button class="action-btn delete" onclick="deleteNote(${n.id})">🗑️ 刪除</button>
       </div>
     </div>`;
   });
   list.innerHTML = html;
+}
+
+function searchYoutube(champTw) {
+  window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent('【海克斯大乱斗】 ' + champTw), '_blank');
 }
 
 function switchPage(page) {
@@ -682,16 +714,15 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// 設定（已寫死，無需手動填入）
 localStorage.setItem('jsonbin_bin_id', '69f6230daaba88219762e941');
 localStorage.setItem('jsonbin_api_key', '$2a$10$A10WT5YFn9oDWjPO2wxhVO.WQy8Zerum/s.ViuBN42TIxwpvB16HK');
-document.getElementById('cfg-bin-id').value = '69f6230daaba88219762e941';
-document.getElementById('cfg-api-key').value = '$2a$10$A10WT5YFn9oDWjPO2wxhVO.WQy8Zerum/s.ViuBN42TIxwpvB16HK';
-document.getElementById('cfg-status-card').style.display = 'block';
 
-renderChampGrid();
-initAugGrids();
-apiGet();
+document.addEventListener('DOMContentLoaded', () => {
+  renderChampGrid();
+  initAugGrids();
+  apiGet();
+  loadAugmentImages();
+});
 </script>
 
 
