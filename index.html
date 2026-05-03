@@ -347,53 +347,28 @@ let currentFilter = 'all';
 let selectedAugs = { prismatic: [], gold: [], silver: [] };
 let notes = [];
 let augmentImageMap = {};
-function getConfig() {
+const GIST_ID = 'e13a60622b9b10f344e3d3ff409ac842';
+const GIST_FILE = 'notes.json';
+function getToken() { return localStorage.getItem('gist_token') || ''; }
+
+function gistHeaders() {
   return {
-    binId: localStorage.getItem('jsonbin_bin_id') || '',
-    apiKey: localStorage.getItem('jsonbin_api_key') || ''
+    'Authorization': `Bearer ${getToken()}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'Content-Type': 'application/json'
   };
 }
 
-function saveSettings() {
-  const binId = document.getElementById('cfg-bin-id').value.trim();
-  const apiKey = document.getElementById('cfg-api-key').value.trim();
-  if (!binId || !apiKey) { showToast('❌ 請填入 BIN ID 和 API Key'); return; }
-  localStorage.setItem('jsonbin_bin_id', binId);
-  localStorage.setItem('jsonbin_api_key', apiKey);
-  document.getElementById('cfg-status-card').style.display = 'block';
-  showToast('✅ 設定已儲存！');
-  testConnection();
-}
-
-async function testConnection() {
-  const {binId, apiKey} = getConfig();
-  const statusEl = document.getElementById('cfg-status');
-  statusEl.textContent = '連線測試中...';
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-      headers: { 'X-Master-Key': apiKey }
-    });
-    if (res.ok) {
-      statusEl.innerHTML = '✅ <span style="color:var(--green,#2ecc71)">連線成功！</span>';
-      showToast('✅ 連線成功！');
-      apiGet();
-    } else {
-      statusEl.innerHTML = '❌ <span style="color:var(--prismatic)">連線失敗，請確認 BIN ID 和 Key 是否正確</span>';
-    }
-  } catch(e) {
-    statusEl.innerHTML = '❌ <span style="color:var(--prismatic)">網路錯誤</span>';
-  }
-}
-
 async function apiGet() {
-  const {binId, apiKey} = getConfig();
-  if (!binId || !apiKey) return;
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-      headers: { 'X-Master-Key': apiKey, 'X-Bin-Meta': 'false' }
+    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      headers: gistHeaders()
     });
     if (!res.ok) throw new Error(res.status);
-    notes = await res.json();
+    const data = await res.json();
+    const content = data.files[GIST_FILE]?.content || '[]';
+    notes = JSON.parse(content);
     if (!Array.isArray(notes)) notes = [];
     renderList();
     document.getElementById('noteCount').textContent = notes.length + ' 筆';
@@ -403,36 +378,29 @@ async function apiGet() {
   }
 }
 
-async function apiSave(note) {
-  const {binId, apiKey} = getConfig();
-  const updated = [note, ...notes];
-  const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey },
-    body: JSON.stringify(updated)
+async function gistWrite(data) {
+  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+    method: 'PATCH',
+    headers: gistHeaders(),
+    body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(data) } } })
   });
   if (!res.ok) throw new Error('儲存失敗：' + res.status);
   return res.json();
 }
 
+async function apiSave(note) {
+  const updated = [note, ...notes];
+  await gistWrite(updated);
+}
+
 async function apiUpdate(note) {
-  const {binId, apiKey} = getConfig();
   const updated = notes.map(n => String(n.id) === String(note.id) ? note : n);
-  await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey },
-    body: JSON.stringify(updated)
-  });
+  await gistWrite(updated);
 }
 
 async function apiDelete(id) {
-  const {binId, apiKey} = getConfig();
   const updated = notes.filter(n => String(n.id) !== String(id));
-  await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey },
-    body: JSON.stringify(updated)
-  });
+  await gistWrite(updated);
 }
 
 // === Champion ===
@@ -714,15 +682,47 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-localStorage.setItem('jsonbin_bin_id', '69f6230daaba88219762e941');
-localStorage.setItem('jsonbin_api_key', '$2a$10$A10WT5YFn9oDWjPO2wxhVO.WQy8Zerum/s.ViuBN42TIxwpvB16HK');
-
 document.addEventListener('DOMContentLoaded', () => {
-  renderChampGrid();
-  initAugGrids();
-  apiGet();
-  loadAugmentImages();
+  if (!getToken()) {
+    showTokenSetup();
+  } else {
+    renderChampGrid();
+    initAugGrids();
+    apiGet();
+    loadAugmentImages();
+  }
 });
+
+function showTokenSetup() {
+  document.body.innerHTML = `
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:24px;">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px;max-width:400px;width:100%;">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:6px;">海克斯大亂鬥筆記</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:24px;">首次設定：請輸入 GitHub Token</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">GitHub Personal Access Token（gist 權限）</div>
+        <input id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx"
+          style="width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:16px;">
+        <button onclick="saveToken()"
+          style="width:100%;padding:14px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:10px;color:#0A0E1A;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;">
+          ✅ 儲存並開始使用
+        </button>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:12px;line-height:1.6;">
+          Token 只存在你的瀏覽器，不會上傳到任何地方。<br>
+          建立方式：GitHub → Settings → Developer settings → Personal access tokens → 勾選 gist 權限
+        </div>
+      </div>
+    </div>`;
+}
+
+function saveToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+    alert('請輸入正確的 GitHub Token（以 ghp_ 開頭）');
+    return;
+  }
+  localStorage.setItem('gist_token', token);
+  location.reload();
+}
 </script>
 
 
