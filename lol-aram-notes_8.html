@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>海克斯大亂鬥筆記</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C89B3C; --gold-dark: #785A28;
+    --silver: #A8A8C0; --prismatic: #E84057;
+    --blue: #0BC4E3;
+    --bg: #0A0E1A; --bg2: #111827; --bg3: #1A2235; --bg4: #212D42;
+    --text: #E8E0D0; --text-dim: #6A7080; --border: #2A3550;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; min-height: 100vh; }
+
+  .header { background: linear-gradient(180deg,#0D1220,#0A0E1A); border-bottom: 1px solid var(--gold-dark); padding: 14px 16px; position: sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; }
+  .header-title { font-family:'Rajdhani',sans-serif; font-size:18px; font-weight:700; color:var(--gold); letter-spacing:2px; }
+  .header-title span { color:var(--blue); }
+  .header-sub { font-size:11px; color:var(--text-dim); }
+
+  .nav { display:flex; background:var(--bg2); border-bottom:1px solid var(--border); }
+  .nav-btn { flex:1; padding:11px 4px; text-align:center; font-size:12px; font-weight:700; color:var(--text-dim); cursor:pointer; border-bottom:3px solid transparent; transition:all 0.2s; }
+  .nav-btn.active { color:var(--gold); border-bottom-color:var(--gold); }
+
+  .page { display:none; padding:16px; padding-bottom:40px; }
+  .page.active { display:block; }
+
+  .section-label { font-size:11px; font-weight:700; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+  .card { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:14px; }
+  .card-champ { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:14px; border-left:4px solid var(--blue); }
+  .card-aug { background:#151E2E; border:1px solid rgba(200,155,60,0.25); border-radius:12px; padding:16px; margin-bottom:14px; border-left:4px solid var(--gold-dark); }
+
+  /* Champion */
+  .champ-search { width:100%; background:var(--bg4); border:1px solid var(--border); border-radius:8px; padding:10px 14px; color:var(--text); font-size:14px; font-family:inherit; outline:none; margin-bottom:10px; }
+  .champ-search:focus { border-color:var(--gold-dark); }
+  .champ-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; max-height:260px; overflow-y:auto; }
+  .champ-item { display:flex; flex-direction:column; align-items:center; cursor:pointer; border-radius:8px; padding:5px 3px; border:1px solid var(--border); background:var(--bg4); transition:all 0.15s; }
+  .champ-item:active { transform:scale(0.95); }
+  .champ-item.selected { border-color:var(--gold); background:rgba(200,155,60,0.15); }
+  .champ-item img { width:48px; height:48px; border-radius:6px; object-fit:cover; display:block; }
+  .champ-item .cn { font-size:10px; color:var(--text-dim); margin-top:3px; text-align:center; line-height:1.2; width:100%; }
+  .champ-item.selected .cn { color:var(--gold); font-weight:700; }
+  .selected-champ { display:flex; align-items:center; gap:12px; }
+  .selected-champ img { width:56px; height:56px; border-radius:8px; border:2px solid var(--gold-dark); }
+  .selected-champ-name { font-size:18px; font-weight:700; color:var(--gold); }
+  .selected-champ-en { font-size:12px; color:var(--text-dim); }
+  .clear-btn { font-size:11px; color:var(--text-dim); cursor:pointer; padding:4px 8px; border:1px solid var(--border); border-radius:6px; }
+
+  /* Augments */
+  .tier-row { display:flex; gap:8px; margin-bottom:8px; align-items:center; }
+  .tier-badge { font-size:10px; font-weight:700; padding:4px 10px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+  .tier-prismatic { background:rgba(232,64,87,0.15); color:var(--prismatic); border:1px solid var(--prismatic); }
+  .tier-gold { background:rgba(200,155,60,0.15); color:var(--gold); border:1px solid var(--gold-dark); }
+  .tier-silver { background:rgba(168,168,192,0.15); color:var(--silver); border:1px solid var(--silver); }
+
+  /* Augment grid multi-select */
+  .aug-section { margin-bottom:14px; }
+  .aug-section:last-child { margin-bottom:0; }
+  .aug-tier-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .aug-search { width:100%; background:var(--bg4); border:1px solid var(--border); border-radius:8px; padding:10px 14px; color:var(--text); font-size:14px; font-family:inherit; outline:none; margin-bottom:12px; }
+  .aug-search:focus { border-color:rgba(200,155,60,0.5); }
+  .aug-search:focus { border-color:rgba(200,155,60,0.4); }
+  .aug-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; }
+  .aug-cell { background:var(--bg4); border:1px solid var(--border); border-radius:7px; padding:8px 6px; font-size:13px; font-weight:500; cursor:pointer; text-align:center; line-height:1.3; transition:all 0.15s; color:var(--text-dim); }
+  .aug-cell:active { transform:scale(0.96); }
+  .aug-cell.selected-prismatic { background:rgba(232,64,87,0.25); border-color:var(--prismatic); color:var(--prismatic); font-weight:700; font-size:13px; }
+  .aug-cell.selected-gold { background:rgba(200,155,60,0.2); border-color:var(--gold); color:var(--gold); font-weight:700; }
+  .aug-cell.selected-silver { background:rgba(168,168,192,0.2); border-color:var(--silver); color:var(--silver); font-weight:700; }
+  .aug-selected-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; min-height:0; }
+  .aug-tag { font-size:10px; padding:2px 8px; border-radius:12px; cursor:pointer; }
+  .aug-tag-prismatic { background:rgba(232,64,87,0.15); color:var(--prismatic); border:1px solid var(--prismatic); }
+  .aug-tag-gold { background:rgba(200,155,60,0.15); color:var(--gold); border:1px solid var(--gold-dark); }
+  .aug-tag-silver { background:rgba(168,168,192,0.15); color:var(--silver); border:1px solid var(--silver); }
+
+  /* Rating */
+  .star-row { display:flex; gap:6px; }
+  .star { font-size:28px; cursor:pointer; opacity:0.3; transition:all 0.15s; }
+  .star.active { opacity:1; }
+
+  /* Notes */
+  .notes-area { width:100%; background:var(--bg4); border:1px solid var(--border); border-radius:8px; padding:12px; color:var(--text); font-size:13px; font-family:inherit; outline:none; min-height:90px; resize:none; line-height:1.6; }
+  .notes-area:focus { border-color:rgba(200,155,60,0.4); }
+
+  /* Source */
+  .source-row { display:flex; gap:6px; flex-wrap:wrap; }
+  .source-btn { padding:7px 10px; text-align:center; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; border:1px solid var(--border); color:var(--text-dim); background:var(--bg4); transition:all 0.2s; }
+  .source-btn.active { border-color:var(--blue); color:var(--blue); background:rgba(11,196,227,0.1); }
+
+  .submit-btn { width:100%; padding:14px; background:linear-gradient(135deg,var(--gold-dark),var(--gold)); border:none; border-radius:10px; color:#0A0E1A; font-size:15px; font-weight:900; font-family:inherit; cursor:pointer; letter-spacing:1px; }
+  .submit-btn:active { opacity:0.8; }
+
+  /* List */
+  .search-wrap { position:relative; margin-bottom:14px; }
+  .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-dim); }
+  .list-search { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:11px 14px 11px 38px; color:var(--text); font-size:14px; font-family:inherit; outline:none; }
+  .filter-row { display:flex; gap:6px; margin-bottom:14px; overflow-x:auto; padding-bottom:4px; }
+  .filter-chip { white-space:nowrap; padding:6px 12px; border-radius:20px; font-size:11px; font-weight:700; cursor:pointer; border:1px solid var(--border); color:var(--text-dim); background:var(--bg3); }
+  .filter-chip.active { border-color:var(--gold); color:var(--gold); background:rgba(200,155,60,0.1); }
+
+  .note-card { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px; position:relative; overflow:hidden; }
+  .note-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+  .note-card.r5::before { background:var(--gold); }
+  .note-card.r4::before { background:var(--silver); }
+  .note-card.r3::before { background:#666; }
+  .note-card-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .note-card-img { width:44px; height:44px; border-radius:7px; border:1px solid var(--border); object-fit:cover; background:var(--bg4); flex-shrink:0; }
+  .note-card-champ { font-size:16px; font-weight:700; }
+  .note-card-date { font-size:10px; color:var(--text-dim); }
+  .note-card-stars { font-size:12px; margin-left:auto; }
+  .note-card-source { font-size:10px; color:var(--blue); background:rgba(11,196,227,0.1); padding:2px 6px; border-radius:4px; }
+  .augment-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
+  .augment-tag { font-size:11px; padding:3px 9px; border-radius:20px; }
+  .aug-prismatic { background:rgba(232,64,87,0.15); color:var(--prismatic); }
+  .aug-gold { background:rgba(200,155,60,0.15); color:var(--gold); }
+  .aug-silver { background:rgba(168,168,192,0.15); color:var(--silver); }
+  .note-card-text { font-size:12px; color:var(--text-dim); line-height:1.5; }
+  .note-card-actions { display:flex; gap:8px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+  .action-btn { flex:1; padding:7px; text-align:center; font-size:11px; font-weight:700; border-radius:7px; cursor:pointer; border:1px solid var(--border); color:var(--text-dim); background:transparent; font-family:inherit; }
+  .action-btn.delete { color:#E84057; border-color:rgba(232,64,87,0.3); }
+
+  .empty-state { text-align:center; padding:60px 20px; color:var(--text-dim); }
+  .empty-icon { font-size:48px; margin-bottom:12px; }
+
+  .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--gold); color:#0A0E1A; padding:12px 24px; border-radius:30px; font-weight:700; font-size:13px; transition:transform 0.3s; z-index:999; white-space:nowrap; }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  ::-webkit-scrollbar { width:4px; height:4px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">海克斯<span>大亂鬥</span>筆記</div>
+    <div class="header-sub">HEXTECH ARAM MAYHEM</div>
+  </div>
+  <div id="noteCount" style="font-size:12px;color:var(--text-dim);"></div>
+</div>
+
+<div class="nav">
+  <div class="nav-btn active" onclick="switchPage('list')">📋 我的筆記</div>
+  <div class="nav-btn" onclick="switchPage('add')">➕ 新增筆記</div>
+  <div class="nav-btn" onclick="switchPage('settings')">⚙️ 設定</div>
+</div>
+
+<!-- LIST -->
+<div class="page active" id="page-list">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="list-search" type="text" placeholder="搜尋英雄或增幅..." oninput="renderList()" id="listSearch">
+  </div>
+  <div class="filter-row">
+    <div class="filter-chip active" onclick="setFilter('all',this)">全部</div>
+    <div class="filter-chip" onclick="setFilter('5',this)">⭐⭐⭐⭐⭐</div>
+    <div class="filter-chip" onclick="setFilter('4',this)">⭐⭐⭐⭐</div>
+    <div class="filter-chip" onclick="setFilter('3',this)">⭐⭐⭐</div>
+  </div>
+  <div id="notesList"></div>
+</div>
+
+<!-- ADD -->
+<div class="page" id="page-add">
+  <div class="card-champ">
+    <div class="section-label" style="color:var(--blue);letter-spacing:3px;">⚔ 選擇英雄</div>
+    <div id="champSelected" style="display:none" class="selected-champ">
+      <img id="selectedImg" src="" alt="">
+      <div style="flex:1">
+        <div class="selected-champ-name" id="selectedName"></div>
+        <div class="selected-champ-en" id="selectedEn"></div>
+      </div>
+      <div class="clear-btn" onclick="clearChamp()">✕ 重選</div>
+    </div>
+    <div id="champPicker">
+      <input class="champ-search" type="text" placeholder="搜尋英雄..." oninput="filterChamps()" id="champSearchInput">
+      <div class="champ-grid" id="champGrid"></div>
+    </div>
+  </div>
+
+  <div class="card-aug">
+    <div class="section-label" style="color:var(--gold);letter-spacing:3px;">✦ 增幅組合（可多選）</div>
+
+    <input class="aug-search" type="text" placeholder="🔍 搜尋增幅名稱..." oninput="filterAllAugs(this.value)" id="aug-search-all">
+
+    <div class="aug-section">
+      <div class="aug-tier-header">
+        <div class="tier-badge tier-prismatic">彩色</div>
+        <div id="aug-tags-prismatic" class="aug-selected-tags"></div>
+      </div>
+      <div class="aug-grid" id="aug-grid-prismatic"></div>
+    </div>
+
+    <div class="aug-section" style="margin-top:12px">
+      <div class="aug-tier-header">
+        <div class="tier-badge tier-gold">金色</div>
+        <div id="aug-tags-gold" class="aug-selected-tags"></div>
+      </div>
+      <div class="aug-grid" id="aug-grid-gold"></div>
+    </div>
+
+    <div class="aug-section" style="margin-top:12px">
+      <div class="aug-tier-header">
+        <div class="tier-badge tier-silver">白銀</div>
+        <div id="aug-tags-silver" class="aug-selected-tags"></div>
+      </div>
+      <div class="aug-grid" id="aug-grid-silver"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">這個組合有多強？</div>
+    <div class="star-row" id="starRow">
+      <span class="star" onclick="setRating(1)">⭐</span>
+      <span class="star" onclick="setRating(2)">⭐</span>
+      <span class="star" onclick="setRating(3)">⭐</span>
+      <span class="star" onclick="setRating(4)">⭐</span>
+      <span class="star" onclick="setRating(5)">⭐</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">心得筆記</div>
+    <textarea class="notes-area" id="noteText" placeholder="這個組合怎麼玩？有什麼技巧？..."></textarea>
+  </div>
+
+  <div class="card">
+    <div class="section-label">資料來源</div>
+    <div class="source-row" id="sourceRow">
+      <div class="source-btn active" onclick="setSource('自己摸索',this)">自己摸索</div>
+      <div class="source-btn" onclick="setSource('YouTube',this)">YouTube</div>
+      <div class="source-btn" onclick="setSource('小超夢',this)">小超夢</div>
+      <div class="source-btn" onclick="setSource('lplfantown',this)">lplfantown</div>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="submit-btn" onclick="saveNote()">💾 儲存筆記</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="card">
+    <div class="section-label" style="color:var(--blue);letter-spacing:3px;">⚙ JSONBin 設定</div>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;line-height:1.6;">
+      將筆記儲存到雲端，任何裝置都能讀取。<br>
+      請到 <a href="https://jsonbin.io" target="_blank" style="color:var(--blue)">jsonbin.io</a> 免費註冊取得以下資訊。
+    </p>
+
+    <div class="section-label" style="margin-bottom:6px;">BIN ID</div>
+    <input class="champ-search" type="text" id="cfg-bin-id" placeholder="例如：67f3a8c2ad19ca34f8a1b2c3" style="margin-bottom:14px;">
+
+    <div class="section-label" style="margin-bottom:6px;">X-Master-Key</div>
+    <input class="champ-search" type="password" id="cfg-api-key" placeholder="$2a$10$..." style="margin-bottom:6px;">
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:16px;">Key 只存在你的瀏覽器裡，不會上傳到任何地方。</p>
+
+    <button class="submit-btn" onclick="saveSettings()">💾 儲存設定</button>
+  </div>
+
+  <div class="card" id="cfg-status-card" style="display:none">
+    <div class="section-label" style="margin-bottom:8px;">連線狀態</div>
+    <div id="cfg-status" style="font-size:13px;"></div>
+    <button class="submit-btn" onclick="testConnection()" style="margin-top:12px;background:linear-gradient(135deg,#0A3D62,var(--blue));color:#fff;">🔌 測試連線</button>
+  </div>
+</div>
+
+<script>
+const CHAMPIONS = [
+  {tw:'厄薩斯',en:'Aatrox'},{tw:'阿璃',en:'Ahri'},{tw:'阿卡莉',en:'Akali'},
+  {tw:'埃可尚',en:'Akshan'},{tw:'亞歷斯塔',en:'Alistar'},{tw:'阿姆姆',en:'Amumu'},
+  {tw:'安比薩',en:'Ambessa'},{tw:'艾妮維亞',en:'Anivia'},{tw:'安妮',en:'Annie'},
+  {tw:'亞菲利歐',en:'Aphelios'},{tw:'艾希',en:'Ashe'},{tw:'翱銳龍獸',en:'AurelionSol'},
+  {tw:'歐羅拉',en:'Aurora'},{tw:'阿祈爾',en:'Azir'},{tw:'巴德',en:'Bard'},
+  {tw:'貝爾薇斯',en:'Belveth'},{tw:'布里茨',en:'Blitzcrank'},{tw:'布蘭德',en:'Brand'},
+  {tw:'布郎姆',en:'Braum'},{tw:'布蕾爾',en:'Briar'},{tw:'卡蜜兒',en:'Camille'},
+  {tw:'卡莎碧雅',en:'Cassiopeia'},{tw:'科加斯',en:'Chogath'},{tw:'庫奇',en:'Corki'},
+  {tw:'達瑞斯',en:'Darius'},{tw:'黛安娜',en:'Diana'},{tw:'蒙多醫生',en:'DrMundo'},
+  {tw:'達瑞文',en:'Draven'},{tw:'艾克',en:'Ekko'},{tw:'伊莉絲',en:'Elise'},
+  {tw:'伊芙琳',en:'Evelynn'},{tw:'伊澤瑞爾',en:'Ezreal'},{tw:'費德提克',en:'Fiddlesticks'},
+  {tw:'菲歐拉',en:'Fiora'},{tw:'飛斯',en:'Fizz'},{tw:'加里歐',en:'Galio'},
+  {tw:'剛普朗克',en:'Gangplank'},{tw:'蓋倫',en:'Garen'},{tw:'吶兒',en:'Gnar'},
+  {tw:'古拉格斯',en:'Gragas'},{tw:'葛雷夫',en:'Graves'},{tw:'關',en:'Gwen'},
+  {tw:'赫克林',en:'Hecarim'},{tw:'漢默丁格',en:'Heimerdinger'},{tw:'赫威',en:'Hwei'},
+  {tw:'伊羅旖',en:'Illaoi'},{tw:'伊瑞莉雅',en:'Irelia'},{tw:'埃爾文',en:'Ivern'},
+  {tw:'珍娜',en:'Janna'},{tw:'嘉文四世',en:'JarvanIV'},{tw:'賈克斯',en:'Jax'},
+  {tw:'杰西',en:'Jayce'},{tw:'燼',en:'Jhin'},{tw:'吉茵珂絲',en:'Jinx'},
+  {tw:'克黎思妲',en:'Kalista'},{tw:'凱莎',en:'Kaisa'},{tw:'卡瑪',en:'Karma'},
+  {tw:'卡爾瑟斯',en:'Karthus'},{tw:'卡薩丁',en:'Kassadin'},{tw:'卡特蓮娜',en:'Katarina'},
+  {tw:'凱爾',en:'Kayle'},{tw:'慨影',en:'Kayn'},{tw:'凱能',en:'Kennen'},
+  {tw:'卡力斯',en:'Khazix'},{tw:'鏡爪',en:'Kindred'},{tw:'克雷德',en:'Kled'},
+  {tw:'寇格魔',en:'KogMaw'},{tw:'卡桑帝',en:'KSante'},{tw:'李星',en:'LeeSin'},
+  {tw:'勒布朗',en:'Leblanc'},{tw:'雷歐娜',en:'Leona'},{tw:'莉莉亞',en:'Lillia'},
+  {tw:'麗珊卓',en:'Lissandra'},{tw:'路西恩',en:'Lucian'},{tw:'露璐',en:'Lulu'},
+  {tw:'拉克絲',en:'Lux'},{tw:'馬爾札哈',en:'Malzahar'},{tw:'墨菲特',en:'Malphite'},
+  {tw:'茂凱',en:'Maokai'},{tw:'易大師',en:'MasterYi'},{tw:'梅爾',en:'Mel'},
+  {tw:'米里歐',en:'Milio'},{tw:'好運姐',en:'MissFortune'},{tw:'魔鬥凱薩',en:'Mordekaiser'},
+  {tw:'魔甘娜',en:'Morgana'},{tw:'娜菲芮',en:'Naafiri'},{tw:'娜米',en:'Nami'},
+  {tw:'納瑟斯',en:'Nasus'},{tw:'納帝魯斯',en:'Nautilus'},{tw:'妮可',en:'Neeko'},
+  {tw:'奈德麗',en:'Nidalee'},{tw:'淣菈',en:'Nilah'},{tw:'夜曲',en:'Nocturne'},
+  {tw:'努努和威朗普',en:'Nunu'},{tw:'歐拉夫',en:'Olaf'},{tw:'鄂爾',en:'Ornn'},
+  {tw:'奧莉安娜',en:'Orianna'},{tw:'潘森',en:'Pantheon'},{tw:'派克',en:'Pyke'},
+  {tw:'姬亞娜',en:'Qiyana'},{tw:'葵恩',en:'Quinn'},{tw:'銳空',en:'Rakan'},
+  {tw:'拉姆斯',en:'Rammus'},{tw:'雷珂煞',en:'RekSai'},{tw:'銳兒',en:'Rell'},
+  {tw:'睿娜妲',en:'Renata'},{tw:'雷尼克頓',en:'Renekton'},{tw:'雷葛爾',en:'Rengar'},
+  {tw:'雷玟',en:'Riven'},{tw:'藍寶',en:'Rumble'},{tw:'雷茲',en:'Ryze'},
+  {tw:'煞蜜拉',en:'Samira'},{tw:'姍娜',en:'Senna'},{tw:'瑟菈紛',en:'Seraphine'},
+  {tw:'賽特',en:'Sett'},{tw:'史瓦妮',en:'Sejuani'},{tw:'慎',en:'Shen'},
+  {tw:'希瓦娜',en:'Shyvana'},{tw:'薩科',en:'Shaco'},{tw:'辛吉德',en:'Singed'},
+  {tw:'賽恩',en:'Sion'},{tw:'希維爾',en:'Sivir'},{tw:'史加納',en:'Skarner'},
+  {tw:'史矛德',en:'Smolder'},{tw:'索娜',en:'Sona'},{tw:'索拉卡',en:'Soraka'},
+  {tw:'星朵拉',en:'Syndra'},{tw:'賽勒斯',en:'Sylas'},{tw:'塔莉雅',en:'Taliyah'},
+  {tw:'塔隆',en:'Talon'},{tw:'貪啃奇',en:'TahmKench'},{tw:'塔里克',en:'Taric'},
+  {tw:'提摩',en:'Teemo'},{tw:'瑟雷西',en:'Thresh'},{tw:'崔絲塔娜',en:'Tristana'},
+  {tw:'特朗德',en:'Trundle'},{tw:'泰達米爾',en:'Tryndamere'},{tw:'圖奇',en:'Twitch'},
+  {tw:'逆命',en:'TwistedFate'},{tw:'烏迪爾',en:'Udyr'},{tw:'烏爾加特',en:'Urgot'},
+  {tw:'法洛士',en:'Varus'},{tw:'汎',en:'Vayne'},{tw:'維迦',en:'Veigar'},
+  {tw:'威寇茲',en:'Velkoz'},{tw:'薇可絲',en:'Vex'},{tw:'菲艾',en:'Vi'},
+  {tw:'維爾戈',en:'Viego'},{tw:'維克特',en:'Viktor'},{tw:'弗力貝爾',en:'Volibear'},
+  {tw:'弗拉迪米爾',en:'Vladimir'},{tw:'沃維克',en:'Warwick'},{tw:'剎雅',en:'Xayah'},
+  {tw:'齊勒斯',en:'Xerath'},{tw:'趙信',en:'XinZhao'},{tw:'犽宿',en:'Yasuo'},
+  {tw:'犽凝',en:'Yone'},{tw:'約瑞科',en:'Yorick'},{tw:'尤娜拉',en:'Yunara'},
+  {tw:'悠咪',en:'Yuumi'},{tw:'薩亨',en:'Zaahen'},{tw:'札克',en:'Zac'},
+  {tw:'劫',en:'Zed'},{tw:'婕莉',en:'Zeri'},{tw:'希格斯',en:'Ziggs'},
+  {tw:'極靈',en:'Zilean'},{tw:'柔依',en:'Zoe'},{tw:'枷蘿',en:'Zyra'},
+];
+
+// 增幅資料（從 op.gg 整理，含彩/金/銀分類）
+const AUGMENTS = {
+  prismatic: [
+    '大地覺醒','巨人','祕術拳擊','戰爭交響曲','任務：烏莉特','妖精魔法',
+    '巨人殺手','質變：大混亂','小丑學院','不祥契約','劍舞之心','衝鋒',
+    '靈光一閃','煉獄使者','輕舞飛揚','旋風鎚','巨無霸雪球','能力值堆堆',
+    '隨我同因','奪命飛踢','潘朵拉的寶盒','寶石手套','最終型態',
+    '雙刀流','基本功夫','地獄三頭犬','觸發地獄火狂襲','封我為王','神聖雪球',
+  ],
+  gold: [
+    '處刑者','自始至終','俠盜恆毅','穿針引線','射手法師','魔法導彈',
+    '殺戮時間','質變：稜鏡','暗夜潛行','升級傲慢','靈魂淨化','吸血迷信',
+    '縮小引擎','極度邪惡','頂尖發明家','不死魔舞','幻影武器','煽動群眾',
+    '見縫插針','二次三次','任務：鋼鐵雄心','超強大腦','穩紮穩打','狂躁！',
+    '雪球升級','雪球輪盤','坦克引擎','彈珠台','斗內','紅包',
+    '終城快車','能力值堆起來！','阿嬤的辣油','腳程加速','痛恨一擊','符文術士',
+    '電光石火','循環利用','縮小光線','靈魂虹吸','土司和奶油','暴擊治療',
+    '土司和起司','聖光顯靈','作弊','急遽成長','普羅能量炮','升級閃耀劍',
+    '雙重命中','煽風點火','老練狙擊手','溢流','棒棒回力鏢','食魂者',
+    '超狙武器','暴擊節奏','升級無盡之刃','暴擊沖天炮','魔法崩彈',
+  ],
+  silver: [
+    '煉獄惡靈','飛影跑法','女巫思維','無敵大絕','飲血','靈活轉換',
+    '一轉就贏','質變：金級','又快又穩','自爆炸彈客','亮起來！','兇殘之柄',
+    '颱風','自我毀滅','轉換惡作劇','火狐','升級中姬沙漏','升級收藏家',
+    '收頭好手','增益麻吉','海洋之魂','毫髮無傷','腿部訓練日','巨大盾牌',
+    '刃下狂風','能力值！','重磅爆發','蠻力重擊','極限衝鋒',
+    '急救箱','逃跑計畫',
+    '手腳麻利','射程強化改造','活力補給',
+  ]
+};
+
+// 圖片：用 ddragon（最快最穩）
+let DDRAGON_VER = '16.9.1';
+// 啟動時自動抓最新版本
+fetch('https://ddragon.leagueoflegends.com/api/versions.json')
+  .then(r => r.json())
+  .then(v => { DDRAGON_VER = v[0]; })
+  .catch(() => {});
+
+function champImg(en) {
+  return `https://ddragon.leagueoflegends.com/cdn/${DDRAGON_VER}/img/champion/${en}.png`;
+}
+function imgFallback(el, tw) {
+  el.onerror = null;
+  el.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect width='48' height='48' fill='%231A2235' rx='6'/%3E%3Ctext x='24' y='31' text-anchor='middle' fill='%23C89B3C' font-size='14' font-family='sans-serif'%3E${encodeURIComponent(tw[0])}%3C/text%3E%3C/svg%3E`;
+}
+
+let selectedChamp = null, currentRating = 0, currentSource = '自己摸索', editingId = null;
+let currentFilter = 'all';
+let selectedAugs = { prismatic: [], gold: [], silver: [] };
+let notes = [];
+function getConfig() {
+  return {
+    binId: localStorage.getItem('jsonbin_bin_id') || '',
+    apiKey: localStorage.getItem('jsonbin_api_key') || ''
+  };
+}
+
+function saveSettings() {
+  const binId = document.getElementById('cfg-bin-id').value.trim();
+  const apiKey = document.getElementById('cfg-api-key').value.trim();
+  if (!binId || !apiKey) { showToast('❌ 請填入 BIN ID 和 API Key'); return; }
+  localStorage.setItem('jsonbin_bin_id', binId);
+  localStorage.setItem('jsonbin_api_key', apiKey);
+  document.getElementById('cfg-status-card').style.display = 'block';
+  showToast('✅ 設定已儲存！');
+  testConnection();
+}
+
+async function testConnection() {
+  const {binId, apiKey} = getConfig();
+  const statusEl = document.getElementById('cfg-status');
+  statusEl.textContent = '連線測試中...';
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+      headers: { 'X-Master-Key': apiKey }
+    });
+    if (res.ok) {
+      statusEl.innerHTML = '✅ <span style="color:var(--green,#2ecc71)">連線成功！</span>';
+      showToast('✅ 連線成功！');
+      apiGet();
+    } else {
+      statusEl.innerHTML = '❌ <span style="color:var(--prismatic)">連線失敗，請確認 BIN ID 和 Key 是否正確</span>';
+    }
+  } catch(e) {
+    statusEl.innerHTML = '❌ <span style="color:var(--prismatic)">網路錯誤</span>';
+  }
+}
+
+async function apiGet() {
+  const {binId, apiKey} = getConfig();
+  if (!binId || !apiKey) return;
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+      headers: { 'X-Master-Key': apiKey, 'X-Bin-Meta': 'false' }
+    });
+    if (!res.ok) throw new Error(res.status);
+    notes = await res.json();
+    if (!Array.isArray(notes)) notes = [];
+    renderList();
+    document.getElementById('noteCount').textContent = notes.length + ' 筆';
+  } catch(e) {
+    console.error('apiGet error', e);
+    showToast('❌ 載入失敗：' + e.message);
+  }
+}
+
+async function apiSave(note) {
+  const {binId, apiKey} = getConfig();
+  const updated = [note, ...notes];
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey },
+    body: JSON.stringify(updated)
+  });
+  if (!res.ok) throw new Error('儲存失敗：' + res.status);
+  return res.json();
+}
+
+async function apiUpdate(note) {
+  const {binId, apiKey} = getConfig();
+  const updated = notes.map(n => String(n.id) === String(note.id) ? note : n);
+  await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey },
+    body: JSON.stringify(updated)
+  });
+}
+
+async function apiDelete(id) {
+  const {binId, apiKey} = getConfig();
+  const updated = notes.filter(n => String(n.id) !== String(id));
+  await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey },
+    body: JSON.stringify(updated)
+  });
+}
+
+// === Champion ===
+function renderChampGrid(filter='') {
+  const grid = document.getElementById('champGrid');
+  const f = filter.toLowerCase();
+  const list = CHAMPIONS.filter(c => !f || c.tw.includes(filter) || c.en.toLowerCase().includes(f));
+  grid.innerHTML = list.map(c => {
+    const label = c.tw.length <= 3 ? c.tw : c.tw.slice(0, 2);
+    return `<div class="champ-item" onclick="selectChamp('${c.tw}','${c.en}')" title="${c.tw}">
+      <img src="${champImg(c.en)}" alt="${c.tw}" loading="lazy" onerror="imgFallback(this,'${c.tw}')">
+      <div class="cn">${label}</div>
+    </div>`;
+  }).join('');
+}
+function filterChamps() { renderChampGrid(document.getElementById('champSearchInput').value); }
+function selectChamp(tw, en) {
+  selectedChamp = {tw, en};
+  document.getElementById('champPicker').style.display = 'none';
+  document.getElementById('champSelected').style.display = 'flex';
+  document.getElementById('selectedImg').src = champImg(en);
+  document.getElementById('selectedImg').onerror = function(){ imgFallback(this, tw); };
+  document.getElementById('selectedName').textContent = tw;
+  document.getElementById('selectedEn').textContent = en;
+}
+function clearChamp() {
+  selectedChamp = null;
+  document.getElementById('champPicker').style.display = 'block';
+  document.getElementById('champSelected').style.display = 'none';
+  document.getElementById('champSearchInput').value = '';
+  renderChampGrid();
+}
+
+// === Augments (multi-select grid) ===
+function renderAugGrid(tier, filter='') {
+  const f = filter.toLowerCase();
+  const list = AUGMENTS[tier].filter(a => {
+    // skip comment lines
+    if (a.startsWith('//')) return false;
+    return !f || a.includes(filter) || a.toLowerCase().includes(f);
+  });
+  const grid = document.getElementById('aug-grid-' + tier);
+  grid.innerHTML = list.map(a => {
+    const sel = selectedAugs[tier].includes(a);
+    return `<div class="aug-cell ${sel ? 'selected-'+tier : ''}" onclick="toggleAug('${tier}','${a}')">${a}</div>`;
+  }).join('');
+}
+function filterAugGrid(tier, val) { renderAugGrid(tier, val); }
+function filterAllAugs(val) {
+  ['prismatic','gold','silver'].forEach(t => renderAugGrid(t, val));
+}
+function toggleAug(tier, val) {
+  const idx = selectedAugs[tier].indexOf(val);
+  if (idx >= 0) selectedAugs[tier].splice(idx, 1);
+  else selectedAugs[tier].push(val);
+  renderAugGrid(tier, document.getElementById('aug-search-all').value);
+  renderAugTags(tier);
+}
+function renderAugTags(tier) {
+  const tags = document.getElementById('aug-tags-' + tier);
+  tags.innerHTML = selectedAugs[tier].map(a =>
+    `<span class="aug-tag aug-tag-${tier}" onclick="toggleAug('${tier}','${a}')">✕ ${a}</span>`
+  ).join('');
+}
+function initAugGrids() {
+  ['prismatic','gold','silver'].forEach(t => renderAugGrid(t));
+}
+
+// === Rating & Source ===
+function setRating(n) {
+  currentRating = n;
+  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('active', i < n));
+}
+function setSource(src, el) {
+  currentSource = src;
+  document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// === Save ===
+async function saveNote() {
+  if (!selectedChamp) { showToast('請先選擇英雄！'); return; }
+  if (editingId !== null) {
+    // 更新模式
+    const idx = notes.findIndex(n => n.id === editingId);
+    if (idx >= 0) {
+      notes[idx] = {
+        ...notes[idx],
+        champ: selectedChamp.tw, champEn: selectedChamp.en,
+        augPrismatic: selectedAugs.prismatic.join('、'),
+        augGold: selectedAugs.gold.join('、'),
+        augSilver: selectedAugs.silver.join('、'),
+        rating: currentRating,
+        text: document.getElementById('noteText').value.trim(),
+        source: currentSource,
+        date: notes[idx].date + '（已更新）',
+      };
+    }
+    showToast('⏳ 更新中...');
+    await apiUpdate(notes[idx]);
+    await apiGet();
+    showToast('✏️ 筆記已更新！');
+    editingId = null;
+    document.getElementById('submit-btn').textContent = '💾 儲存筆記';
+  } else {
+    // 新增模式
+    const note = {
+      id: Date.now(),
+      champ: selectedChamp.tw, champEn: selectedChamp.en,
+      augPrismatic: selectedAugs.prismatic.join('、'),
+      augGold: selectedAugs.gold.join('、'),
+      augSilver: selectedAugs.silver.join('、'),
+      rating: currentRating,
+      text: document.getElementById('noteText').value.trim(),
+      source: currentSource,
+      date: new Date().toLocaleDateString('zh-TW')
+    };
+    showToast('⏳ 儲存中...');
+    try {
+      await apiSave(note);
+      await apiGet();
+      showToast('✅ 筆記已儲存！');
+    } catch(e) {
+      showToast('❌ 儲存失敗：' + e.message);
+      return;
+    }
+  }
+  resetForm();
+  switchPage('list');
+}
+
+function editNote(id) {
+  const n = notes.find(n => n.id === id);
+  if (!n) return;
+  editingId = id;
+  // 切到新增頁
+  switchPage('add');
+  // 填入英雄
+  const champ = CHAMPIONS.find(c => c.tw === n.champ);
+  if (champ) selectChamp(champ.tw, champ.en);
+  // 填入增幅
+  selectedAugs.prismatic = n.augPrismatic ? n.augPrismatic.split('、') : [];
+  selectedAugs.gold = n.augGold ? n.augGold.split('、') : [];
+  selectedAugs.silver = n.augSilver ? n.augSilver.split('、') : [];
+  ['prismatic','gold','silver'].forEach(t => { renderAugGrid(t); renderAugTags(t); });
+  // 填入評分
+  setRating(n.rating || 0);
+  // 填入心得
+  document.getElementById('noteText').value = n.text || '';
+  // 填入來源
+  document.querySelectorAll('.source-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === n.source);
+  });
+  currentSource = n.source;
+  // 更新按鈕文字
+  document.getElementById('submit-btn').textContent = '✏️ 更新筆記';
+}
+function resetForm() {
+  selectedChamp = null; currentRating = 0; currentSource = '自己摸索'; editingId = null;
+  const btn = document.getElementById('submit-btn'); if(btn) btn.textContent = '💾 儲存筆記';
+  selectedAugs = { prismatic:[], gold:[], silver:[] };
+  document.getElementById('champPicker').style.display = 'block';
+  document.getElementById('champSelected').style.display = 'none';
+  document.getElementById('champSearchInput').value = '';
+  document.getElementById('noteText').value = '';
+  document.getElementById('aug-search-all').value = '';
+  ['prismatic','gold','silver'].forEach(t => {
+    renderAugGrid(t);
+    renderAugTags(t);
+  });
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.source-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  renderChampGrid();
+}
+async function deleteNote(id) {
+  showToast('⏳ 刪除中...');
+  await apiDelete(id);
+  await apiGet();
+  showToast('🗑️ 已刪除');
+}
+
+// === List ===
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderList();
+}
+function renderList() {
+  const search = document.getElementById('listSearch').value.toLowerCase();
+  const filtered = notes.filter(n => {
+    const ms = !search || n.champ.includes(search) ||
+      (n.augPrismatic||'').includes(search) || (n.augGold||'').includes(search) ||
+      (n.augSilver||'').includes(search) || (n.text||'').includes(search);
+    const mf = currentFilter === 'all' || n.rating === parseInt(currentFilter);
+    return ms && mf;
+  });
+  document.getElementById('noteCount').textContent = `${notes.length} 筆`;
+  const list = document.getElementById('notesList');
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div>${notes.length===0?'還沒有筆記，去新增一筆吧！':'找不到符合的筆記'}</div></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(n => `
+    <div class="note-card r${n.rating}">
+      <div class="note-card-top">
+        <img class="note-card-img" src="${champImg(n.champEn)}" alt="${n.champ}" loading="lazy" onerror="imgFallback(this,'${n.champ}')">
+        <div style="flex:1">
+          <div class="note-card-champ">${n.champ}</div>
+          <div class="note-card-date">${n.date} · <span class="note-card-source">${n.source}</span></div>
+        </div>
+        <div class="note-card-stars">${'⭐'.repeat(n.rating||0)}</div>
+      </div>
+      <div class="augment-tags">
+        ${n.augPrismatic?`<span class="augment-tag aug-prismatic">🔴 ${n.augPrismatic}</span>`:''}
+        ${n.augGold?`<span class="augment-tag aug-gold">🟡 ${n.augGold}</span>`:''}
+        ${n.augSilver?`<span class="augment-tag aug-silver">⚪ ${n.augSilver}</span>`:''}
+      </div>
+      ${n.text?`<div class="note-card-text">${n.text}</div>`:''}
+      <div class="note-card-actions">
+        <button class="action-btn" onclick="editNote(${n.id})">✏️ 編輯</button>
+        <button class="action-btn delete" onclick="deleteNote(${n.id})">🗑️ 刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+function switchPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const idx = {list:0, add:1, settings:2}[page] || 0;
+  document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  if (page==='list') renderList();
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// 設定（已寫死，無需手動填入）
+localStorage.setItem('jsonbin_bin_id', '69f6230daaba88219762e941');
+localStorage.setItem('jsonbin_api_key', '$2a$10$A10WT5YFn9oDWjPO2wxhVO.WQy8Zerum/s.ViuBN42TIxwpvB16HK');
+document.getElementById('cfg-bin-id').value = '69f6230daaba88219762e941';
+document.getElementById('cfg-api-key').value = '$2a$10$A10WT5YFn9oDWjPO2wxhVO.WQy8Zerum/s.ViuBN42TIxwpvB16HK';
+document.getElementById('cfg-status-card').style.display = 'block';
+
+renderChampGrid();
+initAugGrids();
+apiGet();
+</script>
+
+</body>
+</html>
