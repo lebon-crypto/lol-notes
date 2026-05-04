@@ -363,7 +363,7 @@ function gistHeaders() {
 async function apiGet() {
   try {
     const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      headers: gistHeaders()
+      headers: { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }
     });
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
@@ -509,6 +509,7 @@ function setSource(src, el) {
 // === Save ===
 async function saveNote() {
   if (!selectedChamp) { showToast('請先選擇英雄！'); return; }
+  if (!getToken()) { requireToken(() => saveNote()); return; }
   if (editingId !== null) {
     // 更新模式
     const idx = notes.findIndex(n => n.id === editingId);
@@ -602,6 +603,7 @@ function resetForm() {
   renderChampGrid();
 }
 async function deleteNote(id) {
+  if (!getToken()) { requireToken(() => deleteNote(id)); return; }
   showToast('⏳ 刪除中...');
   await apiDelete(id);
   await apiGet();
@@ -683,45 +685,43 @@ function showToast(msg) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (!getToken()) {
-    showTokenSetup();
-  } else {
-    renderChampGrid();
-    initAugGrids();
-    apiGet();
-    loadAugmentImages();
-  }
+  renderChampGrid();
+  initAugGrids();
+  apiGet();
+  loadAugmentImages();
 });
 
-function showTokenSetup() {
-  document.body.innerHTML = `
-    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:24px;">
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:28px;max-width:400px;width:100%;">
-        <div style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:6px;">海克斯大亂鬥筆記</div>
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:24px;">首次設定：請輸入 GitHub Token</div>
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">GitHub Personal Access Token（gist 權限）</div>
-        <input id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx"
-          style="width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:16px;">
-        <button onclick="saveToken()"
-          style="width:100%;padding:14px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:10px;color:#0A0E1A;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;">
-          ✅ 儲存並開始使用
-        </button>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:12px;line-height:1.6;">
-          Token 只存在你的瀏覽器，不會上傳到任何地方。<br>
-          建立方式：GitHub → Settings → Developer settings → Personal access tokens → 勾選 gist 權限
-        </div>
+function requireToken(action) {
+  if (getToken()) { action(); return; }
+  const overlay = document.createElement('div');
+  overlay.id = 'token-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;';
+  overlay.innerHTML = `
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:360px;width:100%;">
+      <div style="font-size:15px;font-weight:700;color:var(--gold);margin-bottom:6px;">需要 GitHub Token 才能儲存</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:14px;">Token 只存在你的瀏覽器，不會上傳到任何地方</div>
+      <input id="tokenInputModal" type="password" placeholder="ghp_xxxxxxxxxxxx"
+        style="width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:11px;color:var(--text);font-size:13px;font-family:inherit;outline:none;margin-bottom:12px;">
+      <div style="display:flex;gap:8px;">
+        <button onclick="document.getElementById('token-overlay').remove()"
+          style="flex:1;padding:11px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text-dim);font-family:inherit;cursor:pointer;font-size:13px;">取消</button>
+        <button onclick="saveTokenModal()"
+          style="flex:2;padding:11px;background:linear-gradient(135deg,var(--gold-dark),var(--gold));border:none;border-radius:8px;color:#0A0E1A;font-weight:900;font-family:inherit;cursor:pointer;font-size:13px;">✅ 確認</button>
       </div>
     </div>`;
+  document.body.appendChild(overlay);
+  window._pendingAction = action;
 }
 
-function saveToken() {
-  const token = document.getElementById('tokenInput').value.trim();
+function saveTokenModal() {
+  const token = document.getElementById('tokenInputModal').value.trim();
   if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
     alert('請輸入正確的 GitHub Token（以 ghp_ 開頭）');
     return;
   }
   localStorage.setItem('gist_token', token);
-  location.reload();
+  document.getElementById('token-overlay').remove();
+  if (window._pendingAction) window._pendingAction();
 }
 </script>
 
